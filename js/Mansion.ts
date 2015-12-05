@@ -10,6 +10,11 @@ module Mansion {
     doorsUsed: DoorData;
   }
 
+  export interface CollidingDoorData {
+    data: Array<number>;
+    position: string;
+  }
+
   export interface AvatarTiles {
     x1: number;
     x2: number;
@@ -20,7 +25,6 @@ module Mansion {
   export class Mansion {
 
     stage: createjs.Stage;
-    roomURLs: Array<string> = [];
     roomItems: Array<RoomData> = [];
     roomQueue: createjs.LoadQueue;
     mazeRooms: Array<MansionRoomData> = [];
@@ -58,9 +62,10 @@ module Mansion {
     }
 
     refreshDebug() {
-      this.tileShape.graphics.clear();
       if (this.showDebug) {
         this.drawRoomTiles();
+      } else {
+        this.tileShape.graphics.clear();
       }
     }
 
@@ -141,13 +146,93 @@ module Mansion {
         newY = oldY;
       }
       var collidesDoor = this.avatarCollides(tiles, currentRoom.roomData, "d");
-      if (collidesDoor) {
-        console.log("door", this.findCollidingDoor(tiles, currentRoom.roomData));
-      }
+      if (collidesDoor) this.processDoorCollision(tiles, currentRoom);
       this.roomContainer.x = newX;
       this.roomContainer.y = newY;
       this.tileShape.x = this.roomContainer.x;
       this.tileShape.y = this.roomContainer.y;
+    }
+
+    processDoorCollision(tiles: AvatarTiles, currentRoom: MansionRoomData) {
+      var collidingDoor = this.findCollidingDoor(tiles, currentRoom.roomData);
+      // NOTE: works only for single-door walls
+      if (!collidingDoor || currentRoom.doorsUsed[collidingDoor.position].length !== 0) return;
+
+      console.log("new room!", Math.random());
+
+      currentRoom.doorsUsed[collidingDoor.position] = collidingDoor.data;
+      var complementRoom = this.findComplementaryRoom(collidingDoor);
+
+      var xRoom = currentRoom.x;
+      var yRoom = currentRoom.y;
+      var xDoor = 0;
+      var yDoor = 0;
+      var xOffset;
+      var yOffset;
+      var w = complementRoom.tiles[0].length * Config.GRID_SIZE;
+      var h = complementRoom.tiles.length * Config.GRID_SIZE;
+      var x = 0;
+      var y = 0;
+
+      // put the new room
+      var complementDoorPos: Array<number>;
+
+      switch (collidingDoor.position) {
+        case "top":
+          xDoor = xRoom + (collidingDoor.data[0] * Config.GRID_SIZE);
+          yDoor = yRoom;
+          complementDoorPos = complementRoom.doors.bottom;
+          xOffset = complementDoorPos[0] * Config.GRID_SIZE;
+          yOffset = h;
+          x = xRoom - xOffset + xDoor;
+          y = yRoom - yOffset;
+          break;
+        case "bottom":
+          xDoor = xRoom + (collidingDoor.data[0] * Config.GRID_SIZE);
+          yDoor = yRoom + (currentRoom.roomData.tiles.length * Config.GRID_SIZE);
+          complementDoorPos = complementRoom.doors.top;
+          xOffset = complementDoorPos[0] * Config.GRID_SIZE;
+          yOffset = 0;
+          x = xRoom - xOffset + xDoor;
+          y = yRoom + yDoor;
+          break;
+        case "left":
+          xDoor = xRoom;
+          yDoor = yRoom + (collidingDoor.data[0] * Config.GRID_SIZE);
+          complementDoorPos = complementRoom.doors.right;
+          xOffset = w;
+          yOffset = complementDoorPos[0] * Config.GRID_SIZE;
+          x = xRoom - xOffset;
+          y = yRoom - yOffset + yDoor;
+          break;
+        case "right":
+          xDoor = xRoom + (currentRoom.roomData.tiles[0].length * Config.GRID_SIZE);
+          yDoor = currentRoom.y + (collidingDoor.data[0] * Config.GRID_SIZE);
+          complementDoorPos = complementRoom.doors.left;
+          xOffset = 0;
+          yOffset = complementDoorPos[0] * Config.GRID_SIZE;
+          x = xRoom + xDoor;
+          y = yRoom - yOffset + yDoor;
+          break;
+      }
+
+      this.createRoomBitmap(complementRoom, x, y);
+    }
+
+    createRoomBitmap(roomData: RoomData, x: number, y: number) {
+      var gs = Config.GRID_SIZE;
+      var roomURL = roomData.url;
+      var room = new createjs.Bitmap(roomURL);
+      var scaleX = (Math.round(room.getBounds().width / gs) * gs) / room.getBounds().width;
+      var scaleY = (Math.round(room.getBounds().height / gs) * gs) / room.getBounds().height;
+      room.x = x;
+      room.y = y;
+      room.scaleX = scaleX;
+      room.scaleY = scaleY;
+      this.mazeRooms.push({ roomData: roomData, x: x, y: y, doorsUsed: { top: [], right: [], bottom: [], left: [] } });
+      this.roomContainer.addChild(room);
+      this.refreshDebug();
+      this.stage.update();
     }
 
     panTo(x: number, y: number) {
@@ -188,7 +273,7 @@ module Mansion {
       return false;
     }
 
-    findCollidingDoor(avatarTiles: AvatarTiles, room: RoomData): Array<number> {
+    findCollidingDoor(avatarTiles: AvatarTiles, room: RoomData): CollidingDoorData {
       var x1 = avatarTiles.x1;
       var x2 = avatarTiles.x2;
       var y1 = avatarTiles.y1;
@@ -198,22 +283,52 @@ module Mansion {
       var h = room.tiles.length;
 
       if ((y1 === 0 || y2 === 0) && x1 >= doors.top[0] && x1 <= doors.top[0] + doors.top[1]) {
-        return doors.top;
+        return { position: "top", data:doors.top};
       }
 
       if ((y1 === h || y2 === h) && x1 >= doors.bottom[0] && x1 <= doors.bottom[0] + doors.bottom[1]) {
-        return doors.bottom;
+        return { position: "bottom", data:doors.bottom};
       }
 
       if ((x1 === 0 || x2 === 0) && y1 >= doors.left[0] && y1 <= doors.left[0] + doors.left[1]) {
-        return doors.left;
+        return { position: "left", data:doors.left};
       }
 
       if ((x1 === w || x2 === w) && y1 >= doors.right[0] && y1 <= doors.right[0] + doors.right[1]) {
-        return doors.right;
+        return { position: "right", data:doors.right};
       }
 
       return undefined;
+    }
+
+    findComplementaryRoom(toDoor: CollidingDoorData): RoomData {
+      var pos: string;
+
+      var rndRooms: Array<RoomData> = <Array<RoomData>>_.shuffle(this.roomItems);
+
+      switch (toDoor.position) {
+        case "top":
+          pos = "bottom";
+          break;
+        case "bottom":
+          pos = "top";
+          break;
+        case "left":
+          pos = "right";
+          break;
+        case "right":
+          pos = "left";
+          break;
+      }
+
+      for (var key in rndRooms) {
+        var room = rndRooms[key];
+        // check door size matches
+        // NOTE: only works for single-door walls
+        if (room && room.doors && room.doors[pos] && room.doors[pos][1] === toDoor.data[1]) {
+          return room;
+        }
+      }
     }
 
     avatarInRoom(): MansionRoomData {
@@ -243,19 +358,8 @@ module Mansion {
         // y = parentRoom.y + (parentRoom.roomData.tiles.length * gs);
       }
       var roomIndex = this.chooseRandomRoom();
-      var roomURL = this.roomURLs[roomIndex];
-      var room = new createjs.Bitmap(roomURL);
-      room.x = x;
-      room.y = y;
       var roomData = this.roomItems[roomIndex];
-      var scaleX = (Math.round(room.getBounds().width / gs) * gs) / room.getBounds().width;
-      var scaleY = (Math.round(room.getBounds().height / gs) * gs) / room.getBounds().height;
-      room.scaleX = scaleX;
-      room.scaleY = scaleY;
-      this.roomContainer.addChild(room);
-      this.mazeRooms.push({ roomData: roomData, x: x, y: y, doorsUsed: { top: [], right: [], bottom: [], left: [] } });
-      this.refreshDebug();
-      this.stage.update();
+      this.createRoomBitmap(roomData, x, y);
     }
 
     drawRoomTiles() {
@@ -323,10 +427,10 @@ module Mansion {
     handleLoadRoom(event) {
       if (event.item.type == "manifest") return;
       var room = event.item.src;
-      this.roomURLs.push(room);
       var data: RoomData = {
         id: event.item.id,
         src: event.item.src.replace(event.item.path, ""),
+        url: event.item.src,
         root: event.item.root,
         tiles: event.item.tiles,
         doors: event.item.doors

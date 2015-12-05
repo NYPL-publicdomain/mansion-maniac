@@ -20,6 +20,7 @@ module Mansion {
   export interface RoomData {
     id: string;
     src: string;
+    url: string;
     root: number;
     tiles: Array<Array<string>>;
     doors: DoorData;
@@ -461,6 +462,7 @@ module Mansion {
       var data: RoomData = {
         id: event.item.id,
         src: event.item.src.replace(event.item.path, ""),
+        url: event.item.src,
         root: event.item.root,
         tiles: event.item.tiles,
         doors: event.item.doors

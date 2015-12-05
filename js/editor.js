@@ -430,6 +430,7 @@ var Mansion;
             var data = {
                 id: event.item.id,
                 src: event.item.src.replace(event.item.path, ""),
+                url: event.item.src,
                 root: event.item.root,
                 tiles: event.item.tiles,
                 doors: event.item.doors
