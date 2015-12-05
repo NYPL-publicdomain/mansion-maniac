@@ -1,0 +1,38 @@
+body {
+    background-color: black;
+}
+
+.editor {
+    position: absolute;
+    background-color: #666;
+    display: block;
+    cursor: none;
+    left: 10px;
+    top: 10px;
+}
+
+.mansion {
+    background-color: rgb(201, 193, 173);
+    display: block;
+    /*cursor: none;*/
+}
+
+#output {
+    position: absolute;
+    width: 200px;
+    height: 700px;
+    left: 1044px;
+    top: 10px;
+    background-color: #ccc;
+    padding: 10px;
+    font-family: 'Input Mono Condensed', 'Courier New', monospace;
+    font-size: 12px;
+}
+
+#save {
+    width: 220px;
+    height: 70px;
+    position: absolute;
+    top: 740px;
+    left: 1044px;
+}

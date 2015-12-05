@@ -1,0 +1,362 @@
+///<reference path='Editor.ts' />
+///<reference path='typings/tsd.d.ts' />
+
+interface MansionRoomData {
+    roomData: RoomData;
+    x: number;
+    y: number;
+}
+
+interface AvatarTiles {
+    x1: number;
+    x2: number;
+    y1: number;
+    y2: number;
+}
+
+module Mansion {
+
+    export class Mansion {
+
+        stage: createjs.Stage;
+        roomURLs: Array<string> = [];
+        roomItems: Array<RoomData> = [];
+        roomQueue: createjs.LoadQueue;
+        mazeRooms: Array<MansionRoomData> = [];
+        mazeTiles: Array<Array<string>> = [];
+        tileShape: createjs.Shape;
+        avatar: createjs.Shape;
+        roomContainer: createjs.Container;
+        standingRoom: number = 0;
+        showDebug: boolean = true;
+        gridSize: number = 20;
+        panSpeed: number = 2;
+        wallColor: string = "#ff0000";
+        floorColor: string = "#ffffff";
+        doorColor: string = "#00ffff";
+        canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("easelCanvas");
+
+        constructor() {
+            this.stage = new createjs.Stage("easelCanvas");
+            createjs.Ticker.on("tick", this.handleTick, this);
+            window.onresize = this.handleResize.bind(this);
+            this.keyboardController({
+                32: () => { this.addRoomToMaze(); },
+                37: () => { this.left(); },
+                38: () => { this.up(); },
+                39: () => { this.right(); },
+                40: () => { this.down(); }
+            }, 10);
+            this.handleResize();
+        }
+
+        toggleDebug() {
+            this.showDebug = !this.showDebug;
+            this.refreshDebug();
+        }
+
+        refreshDebug() {
+            this.tileShape.graphics.clear();
+            if (this.showDebug) {
+                this.drawRoomTiles();
+            }
+        }
+
+        mansion() {
+            this.roomContainer = new createjs.Container();
+            this.stage.addChild(this.roomContainer);
+
+            this.tileShape = new createjs.Shape();
+            this.tileShape.alpha = 0.5;
+            this.stage.addChild(this.tileShape);
+
+            var x = Math.floor(this.canvas.width * .5);
+            var y = Math.floor(this.canvas.height * .5);
+
+            this.stage.x = x;
+            this.stage.y = y;
+
+            this.loadRooms();
+        }
+
+        startMaze() {
+            this.addRoomToMaze();
+            // put avatar
+            var g = new createjs.Graphics();
+            var off = -this.gridSize;
+            g.f("#00ffff")
+                .ss(0)
+                .r(off + 0, off + 0, this.gridSize * 2, this.gridSize * 2)
+                .f("#ffffff")
+                .r(off + 7, off + 0, 10, 10)
+                .r(off + 23, off + 0, 10, 10)
+                .f("#000000")
+                .r(off + 9, off + 0, 5, 6)
+                .r(off + 25, off + 0, 5, 6)
+                .ef();
+            this.avatar = new createjs.Shape(g);
+            var x = 0;
+            var y = 0;
+            this.avatar.x = x;
+            this.avatar.y = y;
+            this.stage.addChild(this.avatar);
+            var width = this.mazeRooms[0].roomData.tiles[0].length * this.gridSize;
+            var height = this.mazeRooms[0].roomData.tiles.length * this.gridSize;
+            this.panTo(x + (-width * .5), y + (-height * .5));
+        }
+
+        right() {
+            this.avatar.rotation = 90;
+            this.pan(-1, 0);
+        }
+
+        left() {
+            this.avatar.rotation = -90;
+            this.pan(1, 0);
+        }
+
+        up() {
+            this.avatar.rotation = 0;
+            this.pan(0, 1);
+        }
+
+        down() {
+            this.avatar.rotation = 180;
+            this.pan(0, -1);
+        }
+
+        pan(x:number, y:number) {
+            var currentRoom = this.avatarInRoom();
+            if (currentRoom === undefined) return;
+            var oldX = this.roomContainer.x;
+            var oldY = this.roomContainer.y;
+            var newX = oldX + (this.panSpeed * x);
+            var newY = oldY + (this.panSpeed * y);
+            var tiles = this.avatarInTilesInRoom(newX, newY, currentRoom);
+            if (this.avatarCollides(tiles, currentRoom.roomData)) {
+                newX = oldX;
+                newY = oldY;
+            }
+            this.roomContainer.x = newX;
+            this.roomContainer.y = newY;
+            this.tileShape.x = this.roomContainer.x;
+            this.tileShape.y = this.roomContainer.y;
+        }
+
+        panTo(x: number, y: number) {
+            this.tileShape.x = this.roomContainer.x = x;
+            this.tileShape.y = this.roomContainer.y = y;
+        }
+
+        avatarInTilesInRoom(x, y, room: MansionRoomData): AvatarTiles {
+            x = -x;
+            y = -y;
+            var gs = this.gridSize;
+            var roomX = room.x;
+            var roomY = room.y;
+            var w = room.roomData.tiles[0].length * gs;
+            var h = room.roomData.tiles.length * gs;
+            var x1 = Math.floor((x - gs) / gs);
+            var x2 = Math.floor((x + gs) / gs);
+            var y1 = Math.floor((y - gs) / gs);
+            var y2 = Math.floor((y + gs) / gs);
+            return {x1:x1, y1:y1, x2:x2, y2:y2};
+        }
+
+        avatarCollides(avatarTiles: AvatarTiles, room: RoomData): boolean {
+            var x1 = avatarTiles.x1;
+            var x2 = avatarTiles.x2;
+            var y1 = avatarTiles.y1;
+            var y2 = avatarTiles.y2;
+            for (var i = 0; i < room.tiles.length; i++) {
+                for (var j = 0; j < room.tiles[i].length; j++) {
+                    if (i >= y1 && i <= y2 && j >= x1 && j <= x2 && room.tiles[i][j] === "w") {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        avatarInRoom():MansionRoomData {
+            return this.roomAtXY(0, 0);
+        }
+
+        roomAtXY(x:number, y:number):MansionRoomData {
+            for (var roomKey in this.mazeRooms) {
+                var room = this.mazeRooms[roomKey];
+                var w = room.roomData.tiles[0].length * this.gridSize;
+                var h = room.roomData.tiles.length * this.gridSize;
+                if (x >= room.x + this.roomContainer.x && x <= room.x + w + this.roomContainer.x && y >= room.y + this.roomContainer.y && y <= room.y + h + this.roomContainer.y) {
+                    return room;
+                }
+            }
+            return undefined;
+        }
+
+        addRoomToMaze() {
+            var x = 0, y = 0;
+            var l = this.mazeRooms.length;
+            var parentRoom: MansionRoomData;
+            var gs = this.gridSize;
+            if (l > 0) {
+                parentRoom = this.mazeRooms[l - 1];
+                x = parentRoom.x + (parentRoom.roomData.tiles[0].length * gs);
+                // y = parentRoom.y + (parentRoom.roomData.tiles.length * gs);
+            }
+            var roomIndex = this.chooseRandomRoom();
+            var roomURL = this.roomURLs[roomIndex];
+            var room = new createjs.Bitmap(roomURL);
+            room.x = x;
+            room.y = y;
+            var roomData = this.roomItems[roomIndex];
+            var scaleX = (Math.round(room.getBounds().width / gs) * gs) / room.getBounds().width;
+            var scaleY = (Math.round(room.getBounds().height / gs) * gs) / room.getBounds().height;
+            room.scaleX = scaleX;
+            room.scaleY = scaleY;
+            this.roomContainer.addChild(room);
+            this.mazeRooms.push({ roomData: roomData, x: x, y: y });
+            this.refreshDebug();
+            this.stage.update();
+        }
+
+        drawRoomTiles() {
+            var i;
+            var g = new createjs.Graphics();
+            g.setStrokeStyle(0);
+            for (i = 0; i < this.mazeRooms.length; i++) {
+                var room = this.mazeRooms[i];
+                this.drawTiles(g, room);
+            }
+            g.ef();
+            this.tileShape.graphics = g;
+        }
+
+        drawTiles(g, room:MansionRoomData) {
+            var i, j;
+            var roomData = room.roomData;
+            var tiles = roomData.tiles;
+            var color: string;
+            var gs = this.gridSize;
+            for (i = 0; i < tiles.length; i++) {
+                if (tiles[i] === undefined || tiles[i] === null) continue;
+                for (j = 0; j < tiles[i].length; j++) {
+                    switch (tiles[i][j]) {
+                        case "f":
+                            color = this.floorColor;
+                            break;
+                        case "d":
+                            color = this.doorColor;
+                            break;
+                        case "w":
+                            color = this.wallColor;
+                            break;
+                        default:
+                            color = "";
+                            break;
+                    }
+                    if (color !== "") g.f(color).r(room.x + (j * gs), room.y + (i * gs), gs, gs);
+                }
+            }
+        }
+
+        chooseRandomRoom() {
+            var index: number;
+            var count = 0;
+            while (count < 10) {
+                count++;
+                index = Math.floor(Math.random() * this.roomItems.length);
+                var room = this.roomItems[index];
+                if (room.tiles && room.tiles.length > 0 && room.doors && (room.doors.bottom !== undefined || room.doors.top !== undefined || room.doors.right !== undefined || room.doors.left !== undefined)) {
+                    // room has tiles and a door
+                    return index;
+                }
+            }
+            return index;
+        }
+
+        loadRooms() {
+            this.roomQueue = new createjs.LoadQueue(false);
+            this.roomQueue.on("fileload", this.handleLoadRoom, this);
+            this.roomQueue.on("complete", this.handleLoadComplete, this);
+            this.roomQueue.loadManifest("js/rooms.json");
+        }
+
+        handleLoadRoom(event) {
+            if (event.item.type == "manifest") return;
+            var room = event.item.src;
+            this.roomURLs.push(room);
+            var data: RoomData = {
+                id: event.item.id,
+                src: event.item.src.replace(event.item.path, ""),
+                root: event.item.root,
+                tiles: event.item.tiles,
+                doors: event.item.doors
+            };
+            this.roomItems.push(data);
+            console.log(event.item.src);
+        }
+
+        handleLoadComplete(event) {
+            console.log("complete!");
+            this.startMaze();
+        }
+
+        handleResize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
+
+        keyboardController(keys, repeat) {
+            // Lookup of key codes to timer ID, or null for no repeat
+            //
+            var timers = {};
+
+            // When key is pressed and we don't already think it's pressed, call the
+            // key action callback and set a timer to generate another one after a delay
+            //
+            document.onkeydown = function(event) {
+                var key = (<KeyboardEvent>(event || window.event)).keyCode;
+                if (!(key in keys))
+                    return true;
+                if (!(key in timers)) {
+                    timers[key] = null;
+                    keys[key]();
+                    if (repeat !== 0)
+                        timers[key] = setInterval(keys[key], repeat);
+                }
+                return false;
+            };
+
+            // Cancel timeout and mark key as released on keyup
+            //
+            document.onkeyup = function(event) {
+                var key = (<KeyboardEvent>(event || window.event)).keyCode;
+                if (key in timers) {
+                    if (timers[key] !== null)
+                        clearInterval(timers[key]);
+                    delete timers[key];
+                }
+            };
+
+            // When window is unfocused we may not get key events. To prevent this
+            // causing a key to 'get stuck down', cancel all held keys
+            //
+            window.onblur = function() {
+                for (var key in timers)
+                    if (timers[key] !== null)
+                        clearInterval(timers[key]);
+                timers = {};
+            };
+        };
+
+        handleTick(event) {
+            // console.log("tick!");
+            this.stage.update();
+            if (!event.paused) {
+                //
+            }
+        }
+
+    }
+}

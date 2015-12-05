@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version (or Chrome Frame if pre-IE11). -->
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Editor - Mansion Maniacs</title>
+  <script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+  <script src="https://code.createjs.com/preloadjs-0.6.1.min.js"></script>
+  <style>
+      @import url(css/reset.css);
+      @import url(css/styles.css);
+  </style>
+</head>
+<body>
+    <canvas id="easelCanvas" class="editor" width="1024" height="800"></canvas>
+    <textarea id="output"></textarea>
+    <button id="save">SAVE</button>
+    <script src="js/editor.js"></script>
+    <script type="text/javascript">
+    var _editor = new Mansion.Editor();
+    window.onload = function () {
+      _editor.init();
+    }
+    </script>
+</body>
+</html>
