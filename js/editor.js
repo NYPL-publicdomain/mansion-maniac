@@ -1,21 +1,28 @@
 ///<reference path='typings/tsd.d.ts' />
 var Mansion;
 (function (Mansion) {
+    var Config = (function () {
+        function Config() {
+        }
+        Config.WALL_COLOR = "#ff0000";
+        Config.FLOOR_COLOR = "#ffffff";
+        Config.DOOR_COLOR = "#00ffff";
+        Config.DELETE_COLOR = "#000000";
+        Config.GRID_SIZE = 20;
+        Config.AVATAR_SIZE = 18;
+        return Config;
+    })();
+    Mansion.Config = Config;
     var Editor = (function () {
         function Editor() {
             this.roomBitmaps = [];
             this.roomItems = [];
             this.currentRoom = -1;
-            this.gridSize = 20;
             this.canvasWidth = 1024;
             this.canvasHeight = 800;
             this.roomX = 200;
             this.roomY = 160;
             this.tileType = "floor";
-            this.wallColor = "#ff0000";
-            this.floorColor = "#ffffff";
-            this.doorColor = "#00ffff";
-            this.deleteColor = "#000000";
             this.isDrawing = false;
             this.outputBoxElement = document.getElementById("output");
             this.saveButtonElement = document.getElementById("save");
@@ -84,20 +91,20 @@ var Mansion;
             var i, j;
             var tiles = this.roomItems[this.currentRoom].tiles;
             var color;
-            var gs = this.gridSize;
+            var gs = Config.GRID_SIZE;
             for (i = 0; i < tiles.length; i++) {
                 if (tiles[i] === undefined || tiles[i] === null)
                     continue;
                 for (j = 0; j < tiles[i].length; j++) {
                     switch (tiles[i][j]) {
                         case "f":
-                            color = this.floorColor;
+                            color = Config.FLOOR_COLOR;
                             break;
                         case "d":
-                            color = this.doorColor;
+                            color = Config.DOOR_COLOR;
                             break;
                         case "w":
-                            color = this.wallColor;
+                            color = Config.WALL_COLOR;
                             break;
                         default:
                             color = "";
@@ -116,91 +123,91 @@ var Mansion;
             var color;
             switch (this.tileType) {
                 case "floor":
-                    color = this.floorColor;
+                    color = Config.FLOOR_COLOR;
                     break;
                 case "door":
-                    color = this.doorColor;
+                    color = Config.DOOR_COLOR;
                     break;
                 case "wall":
-                    color = this.wallColor;
+                    color = Config.WALL_COLOR;
                     break;
                 case "delete":
-                    color = this.deleteColor;
+                    color = Config.DELETE_COLOR;
                     break;
             }
-            this.mouseCursor.graphics.c().f(color).r(0, 0, this.gridSize * .5, this.gridSize * .5);
+            this.mouseCursor.graphics.c().f(color).r(0, 0, Config.GRID_SIZE * .5, Config.GRID_SIZE * .5);
             this.stage.update();
         };
         Editor.prototype.drawUI = function () {
             var g, text;
             g = new createjs.Graphics();
-            g.f(this.wallColor).r(0, 0, this.gridSize * 6, this.gridSize);
+            g.f(Config.WALL_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
             var wallButton = new createjs.Shape(g);
             wallButton.name = "wall";
             wallButton.cursor = "pointer";
-            wallButton.x = this.gridSize;
-            wallButton.y = this.gridSize;
+            wallButton.x = Config.GRID_SIZE;
+            wallButton.y = Config.GRID_SIZE;
             this.stage.addChild(wallButton);
             wallButton.on("click", this.handleTileButtonClick, this);
-            text = new createjs.Text("Wall", "16px Arial", this.deleteColor);
-            text.x = this.gridSize * 3;
-            text.y = this.gridSize + 2;
+            text = new createjs.Text("Wall", "16px Arial", Config.DELETE_COLOR);
+            text.x = Config.GRID_SIZE * 3;
+            text.y = Config.GRID_SIZE + 2;
             this.stage.addChild(text);
             g = new createjs.Graphics();
-            g.f(this.floorColor).r(0, 0, this.gridSize * 6, this.gridSize);
+            g.f(Config.FLOOR_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
             var floorButton = new createjs.Shape(g);
             floorButton.name = "floor";
             floorButton.cursor = "pointer";
-            floorButton.x = this.gridSize;
-            floorButton.y = this.gridSize * 2;
+            floorButton.x = Config.GRID_SIZE;
+            floorButton.y = Config.GRID_SIZE * 2;
             this.stage.addChild(floorButton);
             floorButton.on("click", this.handleTileButtonClick, this);
-            text = new createjs.Text("Floor", "16px Arial", this.deleteColor);
-            text.x = this.gridSize * 3;
-            text.y = this.gridSize * 2 + 2;
+            text = new createjs.Text("Floor", "16px Arial", Config.DELETE_COLOR);
+            text.x = Config.GRID_SIZE * 3;
+            text.y = Config.GRID_SIZE * 2 + 2;
             this.stage.addChild(text);
             g = new createjs.Graphics();
-            g.f(this.doorColor).r(0, 0, this.gridSize * 6, this.gridSize);
+            g.f(Config.DOOR_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
             var doorButton = new createjs.Shape(g);
             doorButton.name = "door";
             doorButton.cursor = "pointer";
-            doorButton.x = this.gridSize;
-            doorButton.y = this.gridSize * 3;
+            doorButton.x = Config.GRID_SIZE;
+            doorButton.y = Config.GRID_SIZE * 3;
             this.stage.addChild(doorButton);
             doorButton.on("click", this.handleTileButtonClick, this);
-            text = new createjs.Text("Door", "16px Arial", this.deleteColor);
-            text.x = this.gridSize * 3;
-            text.y = this.gridSize * 3 + 2;
+            text = new createjs.Text("Door", "16px Arial", Config.DELETE_COLOR);
+            text.x = Config.GRID_SIZE * 3;
+            text.y = Config.GRID_SIZE * 3 + 2;
             this.stage.addChild(text);
             g = new createjs.Graphics();
-            g.f(this.deleteColor).r(0, 0, this.gridSize * 6, this.gridSize);
+            g.f(Config.DELETE_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
             var deleteButton = new createjs.Shape(g);
             deleteButton.name = "delete";
             deleteButton.cursor = "pointer";
-            deleteButton.x = this.gridSize;
-            deleteButton.y = this.gridSize * 4;
+            deleteButton.x = Config.GRID_SIZE;
+            deleteButton.y = Config.GRID_SIZE * 4;
             this.stage.addChild(deleteButton);
             deleteButton.on("click", this.handleTileButtonClick, this);
-            text = new createjs.Text("Delete", "16px Arial", this.floorColor);
-            text.x = this.gridSize * 3;
-            text.y = this.gridSize * 4 + 2;
+            text = new createjs.Text("Delete", "16px Arial", Config.FLOOR_COLOR);
+            text.x = Config.GRID_SIZE * 3;
+            text.y = Config.GRID_SIZE * 4 + 2;
             this.stage.addChild(text);
             g = new createjs.Graphics();
-            g.f(this.deleteColor).r(0, 0, this.gridSize * 6, this.gridSize);
+            g.f(Config.DELETE_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
             var clearButton = new createjs.Shape(g);
             clearButton.name = "clear";
             clearButton.cursor = "pointer";
-            clearButton.x = this.gridSize;
-            clearButton.y = this.gridSize * 6;
+            clearButton.x = Config.GRID_SIZE;
+            clearButton.y = Config.GRID_SIZE * 6;
             this.stage.addChild(clearButton);
             clearButton.on("click", this.clearTiles, this);
-            text = new createjs.Text("Clear", "16px Arial", this.floorColor);
-            text.x = this.gridSize * 3;
-            text.y = this.gridSize * 6 + 2;
+            text = new createjs.Text("Clear", "16px Arial", Config.FLOOR_COLOR);
+            text.x = Config.GRID_SIZE * 3;
+            text.y = Config.GRID_SIZE * 6 + 2;
             this.stage.addChild(text);
             this.roomText = new createjs.Text("", "16px Arial", "#ffffff");
-            this.roomText.x = this.gridSize;
-            this.roomText.y = this.roomY + this.gridSize;
+            this.roomText.x = Config.GRID_SIZE;
+            this.roomText.y = this.roomY + Config.GRID_SIZE;
             this.stage.addChild(this.roomText);
             this.stage.update();
         };
@@ -209,7 +216,7 @@ var Mansion;
             g.setStrokeStyle(1);
             g.beginStroke("rgba(0,0,0,0.75)");
             var i;
-            for (i = this.gridSize; i < this.canvasWidth; i += this.gridSize) {
+            for (i = Config.GRID_SIZE; i < this.canvasWidth; i += Config.GRID_SIZE) {
                 if (i == this.roomX) {
                     g.beginStroke("rgba(255,255,255,0.75)");
                 }
@@ -219,7 +226,7 @@ var Mansion;
                     g.beginStroke("rgba(0,0,0,0.75)");
                 }
             }
-            for (i = this.gridSize; i < this.canvasHeight; i += this.gridSize) {
+            for (i = Config.GRID_SIZE; i < this.canvasHeight; i += Config.GRID_SIZE) {
                 if (i == this.roomY) {
                     g.beginStroke("rgba(255,255,255,0.75)");
                 }
@@ -257,8 +264,8 @@ var Mansion;
             }
             var room = this.roomBitmaps[this.currentRoom];
             this.roomContainer.removeChildAt(0);
-            var scaleX = (Math.round(room.getBounds().width / this.gridSize) * this.gridSize) / room.getBounds().width;
-            var scaleY = (Math.round(room.getBounds().height / this.gridSize) * this.gridSize) / room.getBounds().height;
+            var scaleX = (Math.round(room.getBounds().width / Config.GRID_SIZE) * Config.GRID_SIZE) / room.getBounds().width;
+            var scaleY = (Math.round(room.getBounds().height / Config.GRID_SIZE) * Config.GRID_SIZE) / room.getBounds().height;
             room.scaleX = scaleX;
             room.scaleY = scaleY;
             // console.log(scaleX, scaleY);
@@ -350,8 +357,8 @@ var Mansion;
             var mX = event.stageX;
             var mY = event.stageY;
             // convert to tile x/y
-            var tileX = Math.floor((mX - this.roomX) / this.gridSize);
-            var tileY = Math.floor((mY - this.roomY) / this.gridSize);
+            var tileX = Math.floor((mX - this.roomX) / Config.GRID_SIZE);
+            var tileY = Math.floor((mY - this.roomY) / Config.GRID_SIZE);
             this.drawTile(tileX, tileY);
         };
         Editor.prototype.handleRoomMouseUp = function (event) {
@@ -370,11 +377,11 @@ var Mansion;
             if (mY < bounds.y)
                 return;
             // convert to tile x/y
-            var tileX = Math.floor((mX - this.roomX) / this.gridSize);
-            var tileY = Math.floor((mY - this.roomY) / this.gridSize);
+            var tileX = Math.floor((mX - this.roomX) / Config.GRID_SIZE);
+            var tileY = Math.floor((mY - this.roomY) / Config.GRID_SIZE);
             // outer bounds for draw
-            var maxTileX = Math.floor(bounds.width / this.gridSize) - 1;
-            var maxTileY = Math.floor(bounds.height / this.gridSize) - 1;
+            var maxTileX = Math.floor(bounds.width / Config.GRID_SIZE) - 1;
+            var maxTileY = Math.floor(bounds.height / Config.GRID_SIZE) - 1;
             // console.log(maxTileX, maxTileY, tileX, tileY);
             if (tileX > maxTileX)
                 return;
