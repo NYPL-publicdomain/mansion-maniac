@@ -554,7 +554,8 @@ var Mansion;
             var newX = oldX + (this.panSpeed * x);
             var newY = oldY + (this.panSpeed * y);
             var tiles = this.avatarInTilesInRoom(newX, newY, currentRoom);
-            if (this.avatarCollides(tiles, currentRoom.roomData)) {
+            var collidesWall = this.avatarCollides(tiles, currentRoom.roomData, "w");
+            if (collidesWall) {
                 newX = oldX;
                 newY = oldY;
             }
@@ -577,19 +578,19 @@ var Mansion;
             var w = room.roomData.tiles[0].length * gs;
             var h = room.roomData.tiles.length * gs;
             var x1 = Math.floor((x - as) / gs);
-            var x2 = Math.floor((x + as) / gs);
+            var x2 = Math.ceil((x + as) / gs);
             var y1 = Math.floor((y - as) / gs);
-            var y2 = Math.floor((y + as) / gs);
+            var y2 = Math.ceil((y + as) / gs);
             return { x1: x1, y1: y1, x2: x2, y2: y2 };
         };
-        Mansion.prototype.avatarCollides = function (avatarTiles, room) {
+        Mansion.prototype.avatarCollides = function (avatarTiles, room, type) {
             var x1 = avatarTiles.x1;
             var x2 = avatarTiles.x2;
             var y1 = avatarTiles.y1;
             var y2 = avatarTiles.y2;
-            for (var i = 0; i < room.tiles.length; i++) {
-                for (var j = 0; j < room.tiles[i].length; j++) {
-                    if (i >= y1 && i <= y2 && j >= x1 && j <= x2 && room.tiles[i][j] === "w") {
+            for (var i = y1; i < y2; i++) {
+                for (var j = x1; j < x2; j++) {
+                    if (i >= y1 && i <= y2 && j >= x1 && j <= x2 && room.tiles[i] && room.tiles[i][j] === type) {
                         return true;
                     }
                 }
