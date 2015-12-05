@@ -182,8 +182,8 @@ module Mansion {
 
       switch (collidingDoor.position) {
         case "top":
-          xDoor = xRoom + (collidingDoor.data[0] * Config.GRID_SIZE);
-          yDoor = yRoom;
+          xDoor = (collidingDoor.data[0] * Config.GRID_SIZE);
+          yDoor = 0;
           complementDoorPos = complementRoom.doors.bottom;
           xOffset = complementDoorPos[0] * Config.GRID_SIZE;
           yOffset = h;
@@ -192,8 +192,8 @@ module Mansion {
           newPos = "bottom";
           break;
         case "bottom":
-          xDoor = xRoom + (collidingDoor.data[0] * Config.GRID_SIZE);
-          yDoor = yRoom + (currentRoom.roomData.tiles.length * Config.GRID_SIZE);
+          xDoor = (collidingDoor.data[0] * Config.GRID_SIZE);
+          yDoor = (currentRoom.roomData.tiles.length * Config.GRID_SIZE);
           complementDoorPos = complementRoom.doors.top;
           xOffset = complementDoorPos[0] * Config.GRID_SIZE;
           yOffset = 0;
@@ -202,8 +202,8 @@ module Mansion {
           newPos = "top";
           break;
         case "left":
-          xDoor = xRoom;
-          yDoor = yRoom + (collidingDoor.data[0] * Config.GRID_SIZE);
+          xDoor = 0;
+          yDoor = (collidingDoor.data[0] * Config.GRID_SIZE);
           complementDoorPos = complementRoom.doors.right;
           xOffset = w;
           yOffset = complementDoorPos[0] * Config.GRID_SIZE;
@@ -212,14 +212,14 @@ module Mansion {
           newPos = "right";
           break;
         case "right":
-          xDoor = xRoom + (currentRoom.roomData.tiles[0].length * Config.GRID_SIZE);
-          yDoor = currentRoom.y + (collidingDoor.data[0] * Config.GRID_SIZE);
+          xDoor = (currentRoom.roomData.tiles[0].length * Config.GRID_SIZE);
+          yDoor = (collidingDoor.data[0] * Config.GRID_SIZE);
           complementDoorPos = complementRoom.doors.left;
           xOffset = 0;
           yOffset = complementDoorPos[0] * Config.GRID_SIZE;
           x = xRoom + xDoor;
           y = yRoom - yOffset + yDoor;
-          newPos = "right";
+          newPos = "left";
           break;
       }
 

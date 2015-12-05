@@ -596,8 +596,8 @@ var Mansion;
             var newPos;
             switch (collidingDoor.position) {
                 case "top":
-                    xDoor = xRoom + (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
-                    yDoor = yRoom;
+                    xDoor = (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
+                    yDoor = 0;
                     complementDoorPos = complementRoom.doors.bottom;
                     xOffset = complementDoorPos[0] * Mansion_1.Config.GRID_SIZE;
                     yOffset = h;
@@ -606,8 +606,8 @@ var Mansion;
                     newPos = "bottom";
                     break;
                 case "bottom":
-                    xDoor = xRoom + (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
-                    yDoor = yRoom + (currentRoom.roomData.tiles.length * Mansion_1.Config.GRID_SIZE);
+                    xDoor = (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
+                    yDoor = (currentRoom.roomData.tiles.length * Mansion_1.Config.GRID_SIZE);
                     complementDoorPos = complementRoom.doors.top;
                     xOffset = complementDoorPos[0] * Mansion_1.Config.GRID_SIZE;
                     yOffset = 0;
@@ -616,8 +616,8 @@ var Mansion;
                     newPos = "top";
                     break;
                 case "left":
-                    xDoor = xRoom;
-                    yDoor = yRoom + (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
+                    xDoor = 0;
+                    yDoor = (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
                     complementDoorPos = complementRoom.doors.right;
                     xOffset = w;
                     yOffset = complementDoorPos[0] * Mansion_1.Config.GRID_SIZE;
@@ -626,14 +626,14 @@ var Mansion;
                     newPos = "right";
                     break;
                 case "right":
-                    xDoor = xRoom + (currentRoom.roomData.tiles[0].length * Mansion_1.Config.GRID_SIZE);
-                    yDoor = currentRoom.y + (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
+                    xDoor = (currentRoom.roomData.tiles[0].length * Mansion_1.Config.GRID_SIZE);
+                    yDoor = (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
                     complementDoorPos = complementRoom.doors.left;
                     xOffset = 0;
                     yOffset = complementDoorPos[0] * Mansion_1.Config.GRID_SIZE;
                     x = xRoom + xDoor;
                     y = yRoom - yOffset + yDoor;
-                    newPos = "right";
+                    newPos = "left";
                     break;
             }
             var newRoom = this.createRoomBitmap(complementRoom, x, y);
