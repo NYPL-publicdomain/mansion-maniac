@@ -29,8 +29,11 @@ module Mansion {
         roomContainer: createjs.Container;
         standingRoom: number = 0;
         showDebug: boolean = true;
+        lastDebugToggle: number = 0;
         gridSize: number = 20;
-        panSpeed: number = 2;
+        avatarSize: number = 18;
+        panSpeed: number = 1;
+        keyDelay: number = 10;
         wallColor: string = "#ff0000";
         floorColor: string = "#ffffff";
         doorColor: string = "#00ffff";
@@ -41,16 +44,19 @@ module Mansion {
             createjs.Ticker.on("tick", this.handleTick, this);
             window.onresize = this.handleResize.bind(this);
             this.keyboardController({
+                68: () => { this.toggleDebug(); },
                 32: () => { this.addRoomToMaze(); },
                 37: () => { this.left(); },
                 38: () => { this.up(); },
                 39: () => { this.right(); },
                 40: () => { this.down(); }
-            }, 10);
+            }, this.keyDelay);
             this.handleResize();
         }
 
         toggleDebug() {
+            if (createjs.Ticker.getTime() - this.lastDebugToggle < 500) return;
+            this.lastDebugToggle = createjs.Ticker.getTime();
             this.showDebug = !this.showDebug;
             this.refreshDebug();
         }
@@ -83,10 +89,10 @@ module Mansion {
             this.addRoomToMaze();
             // put avatar
             var g = new createjs.Graphics();
-            var off = -this.gridSize;
+            var off = -this.avatarSize;
             g.f("#00ffff")
                 .ss(0)
-                .r(off + 0, off + 0, this.gridSize * 2, this.gridSize * 2)
+                .r(off + 0, off + 0, this.avatarSize * 2, this.avatarSize * 2)
                 .f("#ffffff")
                 .r(off + 7, off + 0, 10, 10)
                 .r(off + 23, off + 0, 10, 10)
@@ -100,8 +106,8 @@ module Mansion {
             this.avatar.x = x;
             this.avatar.y = y;
             this.stage.addChild(this.avatar);
-            var width = this.mazeRooms[0].roomData.tiles[0].length * this.gridSize;
-            var height = this.mazeRooms[0].roomData.tiles.length * this.gridSize;
+            var width = this.mazeRooms[0].roomData.tiles[0].length * this.avatarSize;
+            var height = this.mazeRooms[0].roomData.tiles.length * this.avatarSize;
             this.panTo(x + (-width * .5), y + (-height * .5));
         }
 
@@ -152,14 +158,15 @@ module Mansion {
             x = -x;
             y = -y;
             var gs = this.gridSize;
+            var as = this.avatarSize;
             var roomX = room.x;
             var roomY = room.y;
             var w = room.roomData.tiles[0].length * gs;
             var h = room.roomData.tiles.length * gs;
-            var x1 = Math.floor((x - gs) / gs);
-            var x2 = Math.floor((x + gs) / gs);
-            var y1 = Math.floor((y - gs) / gs);
-            var y2 = Math.floor((y + gs) / gs);
+            var x1 = Math.floor((x - as) / gs);
+            var x2 = Math.floor((x + as) / gs);
+            var y1 = Math.floor((y - as) / gs);
+            var y2 = Math.floor((y + as) / gs);
             return {x1:x1, y1:y1, x2:x2, y2:y2};
         }
 
