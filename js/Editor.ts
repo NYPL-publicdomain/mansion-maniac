@@ -20,7 +20,7 @@ module Mansion {
   export interface RoomData {
     id: string;
     src: string;
-    url: string;
+    url: any;
     root: number;
     tiles: Array<Array<string>>;
     doors: DoorData;

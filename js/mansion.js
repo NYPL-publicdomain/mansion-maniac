@@ -473,7 +473,7 @@ var Mansion;
             window.onresize = this.handleResize.bind(this);
             this.keyboardController({
                 68: function () { _this.toggleDebug(); },
-                32: function () { _this.addRoomToMaze(); },
+                32: function () { },
                 37: function () { _this.left(); },
                 38: function () { _this.up(); },
                 39: function () { _this.right(); },
@@ -509,7 +509,7 @@ var Mansion;
             this.loadRooms();
         };
         Mansion.prototype.startMaze = function () {
-            this.addRoomToMaze();
+            this.addBaseRoom();
             // put avatar
             var g = new createjs.Graphics();
             var off = -Mansion_1.Config.AVATAR_SIZE;
@@ -576,9 +576,11 @@ var Mansion;
             // NOTE: works only for single-door walls
             if (!collidingDoor || currentRoom.doorsUsed[collidingDoor.position].length !== 0)
                 return;
-            console.log("new room!", Math.random());
+            console.log("new room!");
             currentRoom.doorsUsed[collidingDoor.position] = collidingDoor.data;
             var complementRoom = this.findComplementaryRoom(collidingDoor);
+            if (!complementRoom)
+                return;
             var xRoom = currentRoom.x;
             var yRoom = currentRoom.y;
             var xDoor = 0;
@@ -591,6 +593,7 @@ var Mansion;
             var y = 0;
             // put the new room
             var complementDoorPos;
+            var newPos;
             switch (collidingDoor.position) {
                 case "top":
                     xDoor = xRoom + (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
@@ -600,6 +603,7 @@ var Mansion;
                     yOffset = h;
                     x = xRoom - xOffset + xDoor;
                     y = yRoom - yOffset;
+                    newPos = "bottom";
                     break;
                 case "bottom":
                     xDoor = xRoom + (collidingDoor.data[0] * Mansion_1.Config.GRID_SIZE);
@@ -609,6 +613,7 @@ var Mansion;
                     yOffset = 0;
                     x = xRoom - xOffset + xDoor;
                     y = yRoom + yDoor;
+                    newPos = "top";
                     break;
                 case "left":
                     xDoor = xRoom;
@@ -618,6 +623,7 @@ var Mansion;
                     yOffset = complementDoorPos[0] * Mansion_1.Config.GRID_SIZE;
                     x = xRoom - xOffset;
                     y = yRoom - yOffset + yDoor;
+                    newPos = "right";
                     break;
                 case "right":
                     xDoor = xRoom + (currentRoom.roomData.tiles[0].length * Mansion_1.Config.GRID_SIZE);
@@ -627,33 +633,38 @@ var Mansion;
                     yOffset = complementDoorPos[0] * Mansion_1.Config.GRID_SIZE;
                     x = xRoom + xDoor;
                     y = yRoom - yOffset + yDoor;
+                    newPos = "right";
                     break;
             }
-            this.createRoomBitmap(complementRoom, x, y);
+            var newRoom = this.createRoomBitmap(complementRoom, x, y);
+            newRoom.doorsUsed[newPos] = complementDoorPos;
         };
         Mansion.prototype.createRoomBitmap = function (roomData, x, y) {
             var gs = Mansion_1.Config.GRID_SIZE;
             var roomURL = roomData.url;
             var room = new createjs.Bitmap(roomURL);
-            var scaleX = (Math.round(room.getBounds().width / gs) * gs) / room.getBounds().width;
-            var scaleY = (Math.round(room.getBounds().height / gs) * gs) / room.getBounds().height;
+            var bounds = room.getBounds();
             room.x = x;
             room.y = y;
+            var scaleX = (Math.round(bounds.width / gs) * gs) / bounds.width;
+            var scaleY = (Math.round(bounds.height / gs) * gs) / bounds.height;
             room.scaleX = scaleX;
             room.scaleY = scaleY;
-            this.mazeRooms.push({ roomData: roomData, x: x, y: y, doorsUsed: { top: [], right: [], bottom: [], left: [] } });
             this.roomContainer.addChild(room);
+            var newRoom = { roomData: roomData, x: x, y: y, doorsUsed: { top: [], right: [], bottom: [], left: [] } };
+            this.mazeRooms.push(newRoom);
             this.refreshDebug();
             this.stage.update();
+            return newRoom;
         };
         Mansion.prototype.panTo = function (x, y) {
             this.tileShape.x = this.roomContainer.x = x;
             this.tileShape.y = this.roomContainer.y = y;
         };
-        Mansion.prototype.avatarInTilesInRoom = function (x, y, room) {
+        Mansion.prototype.avatarInTilesInRoom = function (globalX, globalY, room) {
             // tells which tiles in the room the avatar is standing on top of
-            x = -x;
-            y = -y;
+            var x = -globalX - room.x;
+            var y = -globalY - room.y;
             var gs = Mansion_1.Config.GRID_SIZE;
             var as = Mansion_1.Config.AVATAR_SIZE;
             var roomX = room.x;
@@ -743,15 +754,9 @@ var Mansion;
             }
             return undefined;
         };
-        Mansion.prototype.addRoomToMaze = function () {
+        Mansion.prototype.addBaseRoom = function () {
             var x = 0, y = 0;
-            var l = this.mazeRooms.length;
-            var parentRoom;
             var gs = Mansion_1.Config.GRID_SIZE;
-            if (l > 0) {
-                parentRoom = this.mazeRooms[l - 1];
-                x = parentRoom.x + (parentRoom.roomData.tiles[0].length * gs);
-            }
             var roomIndex = this.chooseRandomRoom();
             var roomData = this.roomItems[roomIndex];
             this.createRoomBitmap(roomData, x, y);
@@ -829,7 +834,7 @@ var Mansion;
                 doors: event.item.doors
             };
             this.roomItems.push(data);
-            console.log(event.item.src);
+            console.log(data);
         };
         Mansion.prototype.handleLoadComplete = function (event) {
             console.log("complete!");
