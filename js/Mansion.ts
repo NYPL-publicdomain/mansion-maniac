@@ -37,6 +37,9 @@ module Mansion {
     lastDebugToggle: number = 0;
     panSpeed: number = 1;
     keyDelay: number = 10;
+    scaleSpeed: number = 0.01;
+    minScale: number = 0.15;
+    maxScale: number = 3;
     canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("easelCanvas");
 
     constructor() {
@@ -45,13 +48,33 @@ module Mansion {
       window.onresize = this.handleResize.bind(this);
       this.keyboardController({
         68: () => { this.toggleDebug(); },
-        32: () => {  },
+        32: () => { }, // space
+        61: () => { this.zoomIn() },
+        173: () => { this.zoomOut() },
         37: () => { this.left(); },
         38: () => { this.up(); },
         39: () => { this.right(); },
         40: () => { this.down(); }
       }, this.keyDelay);
       this.handleResize();
+    }
+
+    zoomOut() {
+      // if (createjs.Ticker.getTime() - this.lastScale < 500) return;
+      var scale = this.stage.scaleX;
+      scale = scale - this.scaleSpeed;
+      if (scale >= this.minScale) {
+        this.stage.scaleX = this.stage.scaleY = scale;
+      }
+    }
+
+    zoomIn() {
+      // if (createjs.Ticker.getTime() - this.lastScale < 500) return;
+      var scale = this.stage.scaleX;
+      scale = scale + this.scaleSpeed;
+      if (scale <= this.maxScale) {
+        this.stage.scaleX = this.stage.scaleY = scale;
+      }
     }
 
     toggleDebug() {
@@ -232,6 +255,10 @@ module Mansion {
       var roomURL = roomData.url;
       var room = new createjs.Bitmap(roomURL);
       var bounds = room.getBounds();
+      if (!bounds) {
+        console.log("could not create room:", roomData);
+        return;
+      }
       room.x = x;
       room.y = y;
       var scaleX = (Math.round(bounds.width / gs) * gs) / bounds.width;
@@ -332,13 +359,18 @@ module Mansion {
           break;
       }
 
-      for (var key in rndRooms) {
-        var room = rndRooms[key];
-        // check door size matches
-        // NOTE: only works for single-door walls
-        if (room && room.doors && room.doors[pos] && room.doors[pos][1] === toDoor.data[1]) {
-          return room;
+      var count = 0;
+
+      while (count < 20) {
+        for (var r in rndRooms) {
+          var room = rndRooms[r];
+          // check door size matches
+          // NOTE: only works for single-door walls
+          if (room && room.root != 1 && room.doors && room.doors[pos] && room.doors[pos][1] === toDoor.data[1]) {
+            return room;
+          }
         }
+        count++;
       }
     }
 
@@ -361,8 +393,15 @@ module Mansion {
     addBaseRoom() {
       var x = 0, y = 0;
       var gs = Config.GRID_SIZE;
-      var roomIndex = this.chooseRandomRoom();
-      var roomData = this.roomItems[roomIndex];
+      var roomData: RoomData;
+      var roomIndex;
+      var count = 0;
+      var found = false;
+      while (!found) {
+        roomIndex = this.chooseRandomRoom();
+        roomData = this.roomItems[roomIndex];
+        found = (roomData.root == 1);
+      }
       this.createRoomBitmap(roomData, x, y);
     }
 
@@ -440,7 +479,7 @@ module Mansion {
         doors: event.item.doors
       };
       this.roomItems.push(data);
-      console.log(data);
+      // console.log(data);
     }
 
     handleLoadComplete(event) {

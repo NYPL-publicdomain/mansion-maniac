@@ -67,6 +67,12 @@ var Mansion;
             this.drawTiles();
             this.updateRoomOutput();
         };
+        Editor.prototype.toggleRoot = function () {
+            this.roomItems[this.currentRoom].root = this.roomItems[this.currentRoom].root == 1 ? 0 : 1;
+            this.roomText.text = "ID: " + this.roomItems[this.currentRoom].id + "\nEntry: " + (this.roomItems[this.currentRoom].root == 1);
+            this.stage.update();
+            this.updateRoomOutput();
+        };
         Editor.prototype.drawTile = function (x, y) {
             var tiles = this.roomItems[this.currentRoom].tiles;
             if (this.tileType === "delete") {
@@ -394,7 +400,7 @@ var Mansion;
         };
         Editor.prototype.handleKeyDown = function (event) {
             var code = event.keyCode;
-            // console.log("key", code);
+            console.log("key", code);
             if (code == 39) {
                 // right
                 this.showRoom();
@@ -406,6 +412,10 @@ var Mansion;
             else if (code == 68) {
                 // D
                 this.updateCursor("door");
+            }
+            else if (code == 82) {
+                // R
+                this.toggleRoot();
             }
             else if (code == 87) {
                 // W

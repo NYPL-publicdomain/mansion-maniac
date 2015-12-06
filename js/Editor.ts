@@ -97,6 +97,13 @@ module Mansion {
       this.updateRoomOutput();
     }
 
+    toggleRoot() {
+      this.roomItems[this.currentRoom].root = this.roomItems[this.currentRoom].root == 1 ? 0 : 1;
+      this.roomText.text = "ID: " + this.roomItems[this.currentRoom].id + "\nEntry: " + (this.roomItems[this.currentRoom].root == 1);
+      this.stage.update();
+      this.updateRoomOutput();
+    }
+
     drawTile(x, y) {
       var tiles = this.roomItems[this.currentRoom].tiles;
       if (this.tileType === "delete") {
@@ -431,7 +438,7 @@ module Mansion {
 
     handleKeyDown(event) {
       var code = event.keyCode;
-      // console.log("key", code);
+      console.log("key", code);
       if (code == 39) {
         // right
         this.showRoom();
@@ -441,6 +448,9 @@ module Mansion {
       } else if (code == 68) {
         // D
         this.updateCursor("door");
+      } else if (code == 82) {
+        // R
+        this.toggleRoot();
       } else if (code == 87) {
         // W
         this.updateCursor("wall");
