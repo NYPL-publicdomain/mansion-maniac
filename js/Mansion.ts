@@ -9,7 +9,6 @@ module Mansion {
     roomItems: Array<RoomData> = [];
     roomQueue: createjs.LoadQueue;
     mazeRooms: Array<MansionRoomData> = [];
-    mazeTiles: Array<Array<string>> = [];
     tileShape: createjs.Shape;
     avatar: createjs.Shape;
     roomContainer: createjs.Container;
@@ -89,15 +88,22 @@ module Mansion {
       this.stage.x = x;
       this.stage.y = y;
 
+      this.addAvatar();
+
       this.loadRooms();
     }
 
     reset() {
-      // TODO
+      this.roomContainer.removeAllChildren();
+      this.tileShape.graphics.clear();
+      this.mazeRooms = [];
+      this.addBaseRoom();
+      var width = this.mazeRooms[0].roomData.tiles[0].length * Config.AVATAR_SIZE;
+      var height = this.mazeRooms[0].roomData.tiles.length * Config.AVATAR_SIZE;
+      this.panTo((-width * .5), (-height * .5));
     }
 
-    startMaze() {
-      this.addBaseRoom();
+    addAvatar() {
       // put avatar
       var g = new createjs.Graphics();
       var off = -Config.AVATAR_SIZE;
@@ -112,14 +118,14 @@ module Mansion {
         .r(off + 25, off + 0, 5, 6)
         .ef();
       this.avatar = new createjs.Shape(g);
-      var x = 0;
-      var y = 0;
-      this.avatar.x = x;
-      this.avatar.y = y;
       this.stage.addChild(this.avatar);
+    }
+
+    startMaze() {
+      this.addBaseRoom();
       var width = this.mazeRooms[0].roomData.tiles[0].length * Config.AVATAR_SIZE;
       var height = this.mazeRooms[0].roomData.tiles.length * Config.AVATAR_SIZE;
-      this.panTo(x + (-width * .5), y + (-height * .5));
+      this.panTo((-width * .5), (-height * .5));
     }
 
     right() {
@@ -306,19 +312,19 @@ module Mansion {
       var w = room.tiles[0].length;
       var h = room.tiles.length;
 
-      if ((y1 === 0 || y2 === 0) && x1 >= doors.top[0] && x1 <= doors.top[0] + doors.top[1]) {
+      if ((y1 === 0 || y2 === 0) && doors.top && x1 >= doors.top[0] && x1 <= doors.top[0] + doors.top[1]) {
         return { position: "top", data:doors.top};
       }
 
-      if ((y1 === h || y2 === h) && x1 >= doors.bottom[0] && x1 <= doors.bottom[0] + doors.bottom[1]) {
+      if ((y1 === h || y2 === h) && doors.bottom && x1 >= doors.bottom[0] && x1 <= doors.bottom[0] + doors.bottom[1]) {
         return { position: "bottom", data:doors.bottom};
       }
 
-      if ((x1 === 0 || x2 === 0) && y1 >= doors.left[0] && y1 <= doors.left[0] + doors.left[1]) {
+      if ((x1 === 0 || x2 === 0) && doors.left && y1 >= doors.left[0] && y1 <= doors.left[0] + doors.left[1]) {
         return { position: "left", data:doors.left};
       }
 
-      if ((x1 === w || x2 === w) && y1 >= doors.right[0] && y1 <= doors.right[0] + doors.right[1]) {
+      if ((x1 === w || x2 === w) && doors.right && y1 >= doors.right[0] && y1 <= doors.right[0] + doors.right[1]) {
         return { position: "right", data:doors.right};
       }
 
