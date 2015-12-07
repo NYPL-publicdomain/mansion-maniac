@@ -29,11 +29,13 @@ var Mansion;
             this.roomY = 160;
             this.tileType = "floor";
             this.isDrawing = false;
+            this.canvas = document.getElementById("easelCanvas");
             this.outputBoxElement = document.getElementById("output");
             this.saveButtonElement = document.getElementById("save");
             this.saveButtonElement.onclick = this.handleSaveClick.bind(this);
             this.stage = new createjs.Stage("easelCanvas");
             this.stage.enableMouseOver(10);
+            window.onresize = this.handleResize.bind(this);
             document.onkeydown = this.handleKeyDown.bind(this);
             // createjs.Ticker.on("tick", this.handleTick, this);
         }
@@ -44,6 +46,7 @@ var Mansion;
             this.initTiles();
             this.loadRooms();
             this.initCursor();
+            this.handleResize();
         };
         Editor.prototype.initCursor = function () {
             this.mouseCursor = new createjs.Shape();
@@ -66,6 +69,9 @@ var Mansion;
             this.roomContainer.on("click", this.handleRoomMouseDown, this);
             this.roomContainer.on("pressmove", this.handleRoomMouseMove, this);
             this.roomContainer.on("pressup", this.handleRoomMouseUp, this);
+            this.grid = new createjs.Shape();
+            this.grid.x = this.grid.y = -.5;
+            this.stage.addChild(this.grid);
         };
         Editor.prototype.clearTiles = function () {
             this.roomItems[this.currentRoom].tiles = [];
@@ -248,16 +254,14 @@ var Mansion;
                 }
             }
             g.es();
-            this.grid = new createjs.Shape(g);
-            this.grid.x = this.grid.y = -.5;
-            this.stage.addChild(this.grid);
+            this.grid.graphics = g;
             this.stage.update();
         };
         Editor.prototype.loadRooms = function () {
             this.roomQueue = new createjs.LoadQueue(false);
             this.roomQueue.on("fileload", this.handleLoadRoom, this);
             this.roomQueue.on("complete", this.handleLoadComplete, this);
-            this.roomQueue.loadManifest("js/rooms.json");
+            this.roomQueue.loadManifest("js/rooms.json?i=" + (Math.random() * 10000));
         };
         Editor.prototype.showRoom = function (next) {
             if (next === void 0) { next = true; }
@@ -300,8 +304,8 @@ var Mansion;
             var top, right, bottom, left;
             if (tiles === undefined || tiles.length === 0)
                 return;
-            var h = tiles[0].length;
-            var v = tiles.length;
+            var h = 0 || tiles[0].length;
+            var v = 0 || tiles.length;
             // right/left
             for (i = 0; i < v; i++) {
                 if (tiles[i] === undefined || tiles[i] === null)
@@ -445,7 +449,7 @@ var Mansion;
             var data = {
                 id: event.item.id,
                 src: event.item.src.replace(event.item.path, ""),
-                url: event.item.src,
+                bitmap: {},
                 root: event.item.root,
                 tiles: event.item.tiles,
                 doors: event.item.doors
@@ -457,6 +461,13 @@ var Mansion;
             console.log("complete!");
             this.showRoom();
             this.updateRoomOutput();
+        };
+        Editor.prototype.handleResize = function () {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.canvasHeight = this.canvas.height;
+            this.canvasWidth = this.canvas.width;
+            this.drawGrid();
         };
         Editor.prototype.handleTick = function (event) {
             // console.log("tick!");

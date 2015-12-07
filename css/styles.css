@@ -3,12 +3,12 @@ body {
 }
 
 .editor {
-  position: absolute;
+  /*position: absolute;*/
   background-color: #666;
   display: block;
   cursor: none;
-  left: 10px;
-  top: 10px;
+  /*left: 10px;*/
+  /*top: 10px;*/
 }
 
 .mansion {

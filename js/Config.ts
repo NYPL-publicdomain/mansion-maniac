@@ -21,29 +21,10 @@ module Mansion {
   export interface RoomData {
     id: string;
     src: string;
-    url: any;
+    bitmap: any;
     root: number;
     tiles: Array<Array<string>>;
     doors: DoorData;
-  }
-
-  export interface MansionRoomData {
-    roomData: RoomData;
-    x: number;
-    y: number;
-    doorsUsed: DoorData;
-  }
-
-  export interface CollidingDoorData {
-    data: Array<number>;
-    position: string;
-  }
-
-  export interface AvatarTiles {
-    x1: number;
-    x2: number;
-    y1: number;
-    y2: number;
   }
 
   export interface MansionRoomData {

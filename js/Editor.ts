@@ -23,6 +23,7 @@ module Mansion {
     saveButtonElement;
     isDrawing: boolean = false;
     roomText: createjs.Text;
+    canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("easelCanvas");
 
     constructor() {
       this.outputBoxElement = document.getElementById("output");
@@ -30,6 +31,7 @@ module Mansion {
       this.saveButtonElement.onclick = this.handleSaveClick.bind(this);
       this.stage = new createjs.Stage("easelCanvas");
       this.stage.enableMouseOver(10);
+      window.onresize = this.handleResize.bind(this);
       document.onkeydown = this.handleKeyDown.bind(this);
       // createjs.Ticker.on("tick", this.handleTick, this);
     }
@@ -41,6 +43,7 @@ module Mansion {
       this.initTiles();
       this.loadRooms();
       this.initCursor();
+      this.handleResize();
     }
 
     initCursor() {
@@ -66,6 +69,10 @@ module Mansion {
       this.roomContainer.on("click", this.handleRoomMouseDown, this);
       this.roomContainer.on("pressmove", this.handleRoomMouseMove, this);
       this.roomContainer.on("pressup", this.handleRoomMouseUp, this);
+
+      this.grid = new createjs.Shape();
+      this.grid.x = this.grid.y = -.5;
+      this.stage.addChild(this.grid);
     }
 
     clearTiles() {
@@ -257,9 +264,7 @@ module Mansion {
         }
       }
       g.es();
-      this.grid = new createjs.Shape(g);
-      this.grid.x = this.grid.y = -.5;
-      this.stage.addChild(this.grid);
+      this.grid.graphics = g;
       this.stage.update();
     }
 
@@ -267,7 +272,7 @@ module Mansion {
       this.roomQueue = new createjs.LoadQueue(false);
       this.roomQueue.on("fileload", this.handleLoadRoom, this);
       this.roomQueue.on("complete", this.handleLoadComplete, this);
-      this.roomQueue.loadManifest("js/rooms.json");
+      this.roomQueue.loadManifest("js/rooms.json?i=" + (Math.random() * 10000));
     }
 
     showRoom(next = true) {
@@ -310,8 +315,8 @@ module Mansion {
       var tiles = this.roomItems[this.currentRoom].tiles;
       var top: Array<number>, right: Array<number>, bottom: Array<number>, left: Array<number>;
       if (tiles === undefined || tiles.length === 0) return;
-      var h = tiles[0].length;
-      var v = tiles.length;
+      var h = 0 || tiles[0].length;
+      var v = 0 || tiles.length;
       // right/left
       for (i = 0; i < v; i++) {
         if (tiles[i] === undefined || tiles[i] === null) continue;
@@ -449,7 +454,7 @@ module Mansion {
       var data: RoomData = {
         id: event.item.id,
         src: event.item.src.replace(event.item.path, ""),
-        url: event.item.src,
+        bitmap: {},
         root: event.item.root,
         tiles: event.item.tiles,
         doors: event.item.doors
@@ -462,6 +467,14 @@ module Mansion {
       console.log("complete!");
       this.showRoom();
       this.updateRoomOutput();
+    }
+
+    handleResize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+      this.canvasHeight = this.canvas.height;
+      this.canvasWidth = this.canvas.width;
+      this.drawGrid();
     }
 
     handleTick(event) {

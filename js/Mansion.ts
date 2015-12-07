@@ -14,7 +14,7 @@ module Mansion {
     avatar: createjs.Shape;
     roomContainer: createjs.Container;
     standingRoom: number = 0;
-    showDebug: boolean = true;
+    showDebug: boolean = false;
     lastDebugToggle: number = 0;
     panSpeed: number = 1;
     keyDelay: number = 10;
@@ -235,8 +235,7 @@ module Mansion {
 
     createRoomBitmap(roomData: RoomData, x: number, y: number): MansionRoomData {
       var gs = Config.GRID_SIZE;
-      var roomURL = roomData.url;
-      var room = new createjs.Bitmap(roomURL);
+      var room = roomData.bitmap;
       var bounds = room.getBounds();
       if (!bounds) {
         console.log("could not create room:", roomData);
@@ -447,7 +446,7 @@ module Mansion {
       this.roomQueue = new createjs.LoadQueue(false);
       this.roomQueue.on("fileload", this.handleLoadRoom, this);
       this.roomQueue.on("complete", this.handleLoadComplete, this);
-      this.roomQueue.loadManifest("js/rooms.json");
+      this.roomQueue.loadManifest("js/rooms.json?i=" + (Math.random()*10000));
     }
 
     handleLoadRoom(event) {
@@ -456,13 +455,13 @@ module Mansion {
       var data: RoomData = {
         id: event.item.id,
         src: event.item.src.replace(event.item.path, ""),
-        url: event.item.src,
+        bitmap: new createjs.Bitmap(room),
         root: event.item.root,
         tiles: event.item.tiles,
         doors: event.item.doors
       };
       this.roomItems.push(data);
-      // console.log(data);
+      console.log(room);
     }
 
     handleLoadComplete(event) {

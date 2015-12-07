@@ -25,7 +25,7 @@ var Mansion;
             this.mazeRooms = [];
             this.mazeTiles = [];
             this.standingRoom = 0;
-            this.showDebug = true;
+            this.showDebug = false;
             this.lastDebugToggle = 0;
             this.panSpeed = 1;
             this.keyDelay = 10;
@@ -226,8 +226,7 @@ var Mansion;
         };
         Mansion.prototype.createRoomBitmap = function (roomData, x, y) {
             var gs = Mansion_1.Config.GRID_SIZE;
-            var roomURL = roomData.url;
-            var room = new createjs.Bitmap(roomURL);
+            var room = roomData.bitmap;
             var bounds = room.getBounds();
             if (!bounds) {
                 console.log("could not create room:", roomData);
@@ -419,7 +418,7 @@ var Mansion;
             this.roomQueue = new createjs.LoadQueue(false);
             this.roomQueue.on("fileload", this.handleLoadRoom, this);
             this.roomQueue.on("complete", this.handleLoadComplete, this);
-            this.roomQueue.loadManifest("js/rooms.json");
+            this.roomQueue.loadManifest("js/rooms.json?i=" + (Math.random() * 10000));
         };
         Mansion.prototype.handleLoadRoom = function (event) {
             if (event.item.type == "manifest")
@@ -428,13 +427,13 @@ var Mansion;
             var data = {
                 id: event.item.id,
                 src: event.item.src.replace(event.item.path, ""),
-                url: event.item.src,
+                bitmap: new createjs.Bitmap(room),
                 root: event.item.root,
                 tiles: event.item.tiles,
                 doors: event.item.doors
             };
             this.roomItems.push(data);
-            // console.log(data);
+            console.log(room);
         };
         Mansion.prototype.handleLoadComplete = function (event) {
             console.log("complete!");
