@@ -1,26 +1,7 @@
-///<reference path='Editor.ts' />
+///<reference path='Config.ts' />
 ///<reference path='typings/tsd.d.ts' />
 
 module Mansion {
-
-  export interface MansionRoomData {
-    roomData: RoomData;
-    x: number;
-    y: number;
-    doorsUsed: DoorData;
-  }
-
-  export interface CollidingDoorData {
-    data: Array<number>;
-    position: string;
-  }
-
-  export interface AvatarTiles {
-    x1: number;
-    x2: number;
-    y1: number;
-    y2: number;
-  }
 
   export class Mansion {
 
@@ -50,6 +31,8 @@ module Mansion {
         68: () => { this.toggleDebug(); },
         32: () => { }, // space
         61: () => { this.zoomIn() },
+        107: () => { this.zoomIn() },
+        109: () => { this.zoomOut() },
         173: () => { this.zoomOut() },
         37: () => { this.left(); },
         38: () => { this.up(); },

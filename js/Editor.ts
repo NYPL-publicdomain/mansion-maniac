@@ -1,30 +1,7 @@
+///<reference path='Config.ts' />
 ///<reference path='typings/tsd.d.ts' />
+
 module Mansion {
-
-  export class Config {
-    public static WALL_COLOR: string = "#ff0000";
-    public static FLOOR_COLOR: string = "#ffffff";
-    public static DOOR_COLOR: string = "#00ffff";
-    public static DELETE_COLOR: string = "#000000";
-    public static GRID_SIZE: number = 20;
-    public static AVATAR_SIZE: number = 18;
-  }
-
-  export interface DoorData {
-    top: Array<number>;
-    right: Array<number>;
-    bottom: Array<number>;
-    left: Array<number>;
-  }
-
-  export interface RoomData {
-    id: string;
-    src: string;
-    url: any;
-    root: number;
-    tiles: Array<Array<string>>;
-    doors: DoorData;
-  }
 
   export class Editor {
 
