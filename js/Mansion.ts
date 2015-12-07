@@ -92,6 +92,10 @@ module Mansion {
       this.loadRooms();
     }
 
+    reset() {
+      // TODO
+    }
+
     startMaze() {
       this.addBaseRoom();
       // put avatar
@@ -235,7 +239,7 @@ module Mansion {
 
     createRoomBitmap(roomData: RoomData, x: number, y: number): MansionRoomData {
       var gs = Config.GRID_SIZE;
-      var room = roomData.bitmap;
+      var room = roomData.bitmap.clone();
       var bounds = room.getBounds();
       if (!bounds) {
         console.log("could not create room:", roomData);

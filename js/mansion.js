@@ -93,6 +93,9 @@ var Mansion;
             this.stage.y = y;
             this.loadRooms();
         };
+        Mansion.prototype.reset = function () {
+            // TODO
+        };
         Mansion.prototype.startMaze = function () {
             this.addBaseRoom();
             // put avatar
@@ -226,7 +229,7 @@ var Mansion;
         };
         Mansion.prototype.createRoomBitmap = function (roomData, x, y) {
             var gs = Mansion_1.Config.GRID_SIZE;
-            var room = roomData.bitmap;
+            var room = roomData.bitmap.clone();
             var bounds = room.getBounds();
             if (!bounds) {
                 console.log("could not create room:", roomData);
