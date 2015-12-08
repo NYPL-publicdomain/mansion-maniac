@@ -26,6 +26,7 @@ var Mansion;
             this.standingRoom = 0;
             this.showDebug = false;
             this.lastDebugToggle = 0;
+            this.lastReset = 0;
             this.panSpeed = 1;
             this.keyDelay = 10;
             this.scaleSpeed = 0.01;
@@ -37,7 +38,8 @@ var Mansion;
             window.onresize = this.handleResize.bind(this);
             this.keyboardController({
                 68: function () { _this.toggleDebug(); },
-                32: function () { },
+                32: function () { _this.reset(); },
+                // 82: () => { }, // R
                 61: function () { _this.zoomIn(); },
                 107: function () { _this.zoomIn(); },
                 109: function () { _this.zoomOut(); },
@@ -94,6 +96,9 @@ var Mansion;
             this.loadRooms();
         };
         Mansion.prototype.reset = function () {
+            if (createjs.Ticker.getTime() - this.lastReset < 500)
+                return;
+            this.lastReset = createjs.Ticker.getTime();
             this.roomContainer.removeAllChildren();
             this.tileShape.graphics.clear();
             this.mazeRooms = [];
@@ -106,18 +111,37 @@ var Mansion;
             // put avatar
             var g = new createjs.Graphics();
             var off = -Mansion_1.Config.AVATAR_SIZE;
+            var leftX = 6;
+            var rightX = 22;
+            var eyeDist = 2;
+            var eyeSize = 10;
+            var irisSize = 5;
             g.f("#00ffff")
                 .ss(0)
-                .r(off + 0, off + 0, Mansion_1.Config.AVATAR_SIZE * 2, Mansion_1.Config.AVATAR_SIZE * 2)
+                .r(off, off, Mansion_1.Config.AVATAR_SIZE * 2, Mansion_1.Config.AVATAR_SIZE * 2)
                 .f("#ffffff")
-                .r(off + 7, off + 0, 10, 10)
-                .r(off + 23, off + 0, 10, 10)
+                .r(off + leftX, off + eyeDist, eyeSize, eyeSize)
+                .r(off + rightX, off + eyeDist, eyeSize, eyeSize)
                 .f("#000000")
-                .r(off + 9, off + 0, 5, 6)
-                .r(off + 25, off + 0, 5, 6)
+                .r(off + leftX + eyeDist, off + eyeDist + eyeDist, irisSize, irisSize)
+                .r(off + rightX + eyeDist, off + eyeDist + eyeDist, irisSize, irisSize)
+                .ef();
+            this.avatarFront = new createjs.Shape(g);
+            this.stage.addChild(this.avatarFront);
+            g = new createjs.Graphics();
+            g.f("#00ffff")
+                .ss(0)
+                .r(off, off, Mansion_1.Config.AVATAR_SIZE * 2, Mansion_1.Config.AVATAR_SIZE * 2)
+                .f("#ffffff")
+                .r(off + leftX, off, eyeSize, eyeSize)
+                .r(off + rightX, off, eyeSize, eyeSize)
+                .f("#000000")
+                .r(off + leftX + eyeDist, off, irisSize, irisSize)
+                .r(off + rightX + eyeDist, off, irisSize, irisSize)
                 .ef();
             this.avatar = new createjs.Shape(g);
             this.stage.addChild(this.avatar);
+            this.avatar.visible = false;
         };
         Mansion.prototype.startMaze = function () {
             this.addBaseRoom();
@@ -142,6 +166,7 @@ var Mansion;
             this.pan(0, -1);
         };
         Mansion.prototype.pan = function (x, y) {
+            this.avatar.visible = true;
             var currentRoom = this.avatarInRoom();
             if (currentRoom === undefined)
                 return;
@@ -444,13 +469,18 @@ var Mansion;
         };
         Mansion.prototype.handleLoadComplete = function (event) {
             console.log("complete!");
+            document.getElementById("loader").style.display = 'none';
             this.startMaze();
         };
         Mansion.prototype.handleResize = function () {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
         };
+        Mansion.prototype.handleKeyUp = function (event) {
+            this.avatar.visible = false;
+        };
         Mansion.prototype.keyboardController = function (keys, repeat) {
+            var _this = this;
             // Lookup of key codes to timer ID, or null for no repeat
             //
             var timers = {};
@@ -473,6 +503,7 @@ var Mansion;
             //
             document.onkeyup = function (event) {
                 var key = (event || window.event).keyCode;
+                _this.handleKeyUp(event);
                 if (key in timers) {
                     if (timers[key] !== null)
                         clearInterval(timers[key]);

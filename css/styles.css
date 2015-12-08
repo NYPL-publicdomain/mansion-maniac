@@ -11,6 +11,20 @@ body {
   /*top: 10px;*/
 }
 
+#loader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 11;
+  font-family: 'Input Mono Condensed', 'Courier New', monospace;
+  font-size: 30px;
+  color: white;
+  padding-top: 20%;
+}
+
 .mansion {
   background-color: rgb(201, 193, 173);
   display: block;

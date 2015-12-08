@@ -11,10 +11,12 @@ module Mansion {
     mazeRooms: Array<MansionRoomData> = [];
     tileShape: createjs.Shape;
     avatar: createjs.Shape;
+    avatarFront: createjs.Shape;
     roomContainer: createjs.Container;
     standingRoom: number = 0;
     showDebug: boolean = false;
     lastDebugToggle: number = 0;
+    lastReset: number = 0;
     panSpeed: number = 1;
     keyDelay: number = 10;
     scaleSpeed: number = 0.01;
@@ -28,7 +30,8 @@ module Mansion {
       window.onresize = this.handleResize.bind(this);
       this.keyboardController({
         68: () => { this.toggleDebug(); },
-        32: () => { }, // space
+        32: () => { this.reset(); }, // space
+        // 82: () => { }, // R
         61: () => { this.zoomIn() },
         107: () => { this.zoomIn() },
         109: () => { this.zoomOut() },
@@ -94,6 +97,8 @@ module Mansion {
     }
 
     reset() {
+      if (createjs.Ticker.getTime() - this.lastReset < 500) return;
+      this.lastReset = createjs.Ticker.getTime();
       this.roomContainer.removeAllChildren();
       this.tileShape.graphics.clear();
       this.mazeRooms = [];
@@ -107,18 +112,40 @@ module Mansion {
       // put avatar
       var g = new createjs.Graphics();
       var off = -Config.AVATAR_SIZE;
+      var leftX = 6;
+      var rightX = 22;
+      var eyeDist = 2;
+      var eyeSize = 10;
+      var irisSize = 5;
+
       g.f("#00ffff")
         .ss(0)
-        .r(off + 0, off + 0, Config.AVATAR_SIZE * 2, Config.AVATAR_SIZE * 2)
+        .r(off, off, Config.AVATAR_SIZE * 2, Config.AVATAR_SIZE * 2)
         .f("#ffffff")
-        .r(off + 7, off + 0, 10, 10)
-        .r(off + 23, off + 0, 10, 10)
+        .r(off + leftX, off + eyeDist, eyeSize, eyeSize)
+        .r(off + rightX, off + eyeDist, eyeSize, eyeSize)
         .f("#000000")
-        .r(off + 9, off + 0, 5, 6)
-        .r(off + 25, off + 0, 5, 6)
+        .r(off + leftX + eyeDist, off + eyeDist + eyeDist, irisSize, irisSize)
+        .r(off + rightX + eyeDist, off + eyeDist + eyeDist, irisSize, irisSize)
+        .ef();
+      this.avatarFront = new createjs.Shape(g);
+      this.stage.addChild(this.avatarFront);
+
+      g = new createjs.Graphics();
+      g.f("#00ffff")
+        .ss(0)
+        .r(off, off, Config.AVATAR_SIZE * 2, Config.AVATAR_SIZE * 2)
+        .f("#ffffff")
+        .r(off + leftX, off, eyeSize, eyeSize)
+        .r(off + rightX, off, eyeSize, eyeSize)
+        .f("#000000")
+        .r(off + leftX + eyeDist, off, irisSize, irisSize)
+        .r(off + rightX + eyeDist, off, irisSize, irisSize)
         .ef();
       this.avatar = new createjs.Shape(g);
       this.stage.addChild(this.avatar);
+
+      this.avatar.visible = false;
     }
 
     startMaze() {
@@ -149,6 +176,7 @@ module Mansion {
     }
 
     pan(x: number, y: number) {
+      this.avatar.visible = true;
       var currentRoom = this.avatarInRoom();
       if (currentRoom === undefined) return;
       var oldX = this.roomContainer.x;
@@ -476,12 +504,17 @@ module Mansion {
 
     handleLoadComplete(event) {
       console.log("complete!");
+      (<HTMLDivElement>document.getElementById("loader")).style.display = 'none';
       this.startMaze();
     }
 
     handleResize() {
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
+    }
+
+    handleKeyUp(event) {
+      this.avatar.visible = false;
     }
 
     keyboardController(keys, repeat) {
@@ -507,8 +540,9 @@ module Mansion {
 
       // Cancel timeout and mark key as released on keyup
       //
-      document.onkeyup = function(event) {
+      document.onkeyup = (event) => {
         var key = (<KeyboardEvent>(event || window.event)).keyCode;
+        this.handleKeyUp(event);
         if (key in timers) {
           if (timers[key] !== null)
             clearInterval(timers[key]);
