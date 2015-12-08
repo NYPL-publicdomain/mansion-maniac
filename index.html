@@ -17,6 +17,25 @@
 </head>
 <body>
   <canvas id="easelCanvas" class="mansion" width="100%" height="100%"></canvas>
+  <div id="controls">
+    <div class="zoom">
+      <div class="button zoomin" onclick="_maniac.zoomIn()">+</div>
+      <div class="button zoomout" onclick="_maniac.zoomOut()">-</div>
+    </div>
+    <div class="arrows">
+      <div class="column">
+        <div class="button left" onclick="_maniac.left()">Left<span class="help">←</span></div>
+      </div>
+      <div class="column">
+        <div class="button up" onclick="_maniac.up()">Up<span class="help">↑</span></div>
+        <div class="button down" onclick="_maniac.down()">Down<span class="help">↓</span></div>
+      </div>
+      <div class="column">
+        <div class="button right" onclick="_maniac.right()">Right<span class="help">→</span></div>
+      </div>
+    </div>
+    <div class="button save" onclick="_maniac.saveMansion()">Save</div>
+  </div>
   <div id="loader">Loading...</div>
   <script src="js/lib/underscore-min.js"></script>
   <script src="js/mansion.js"></script>

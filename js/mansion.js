@@ -27,6 +27,7 @@ var Mansion;
             this.showDebug = false;
             this.lastDebugToggle = 0;
             this.lastReset = 0;
+            this.lastSave = 0;
             this.panSpeed = 1;
             this.keyDelay = 10;
             this.scaleSpeed = 0.01;
@@ -39,7 +40,8 @@ var Mansion;
             this.keyboardController({
                 68: function () { _this.toggleDebug(); },
                 32: function () { _this.reset(); },
-                // 82: () => { }, // R
+                // 82: () => {  }, // R
+                87: function () { _this.saveMansion(); },
                 61: function () { _this.zoomIn(); },
                 107: function () { _this.zoomIn(); },
                 109: function () { _this.zoomOut(); },
@@ -142,6 +144,26 @@ var Mansion;
             this.avatar = new createjs.Shape(g);
             this.stage.addChild(this.avatar);
             this.avatar.visible = false;
+        };
+        Mansion.prototype.saveMansion = function () {
+            if (createjs.Ticker.getTime() - this.lastSave < 500)
+                return;
+            this.lastSave = createjs.Ticker.getTime();
+            // save the room container as a bitmap
+            var bounds = this.roomContainer.getBounds();
+            if (!bounds)
+                return;
+            this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
+            var url = this.roomContainer.getCacheDataURL();
+            // prompt browser download
+            var element = document.createElement('a');
+            element.setAttribute('href', url);
+            element.setAttribute('download', 'mansion.png');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            // refresh room container
+            this.roomContainer.uncache();
         };
         Mansion.prototype.startMaze = function () {
             this.addBaseRoom();

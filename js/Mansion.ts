@@ -17,6 +17,7 @@ module Mansion {
     showDebug: boolean = false;
     lastDebugToggle: number = 0;
     lastReset: number = 0;
+    lastSave: number = 0;
     panSpeed: number = 1;
     keyDelay: number = 10;
     scaleSpeed: number = 0.01;
@@ -31,7 +32,8 @@ module Mansion {
       this.keyboardController({
         68: () => { this.toggleDebug(); },
         32: () => { this.reset(); }, // space
-        // 82: () => { }, // R
+        // 82: () => {  }, // R
+        87: () => { this.saveMansion() }, // W
         61: () => { this.zoomIn() },
         107: () => { this.zoomIn() },
         109: () => { this.zoomOut() },
@@ -146,6 +148,25 @@ module Mansion {
       this.stage.addChild(this.avatar);
 
       this.avatar.visible = false;
+    }
+
+    saveMansion() {
+      if (createjs.Ticker.getTime() - this.lastSave < 500) return;
+      this.lastSave = createjs.Ticker.getTime();
+      // save the room container as a bitmap
+      var bounds = this.roomContainer.getBounds();
+      if (!bounds) return;
+      this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
+      var url = this.roomContainer.getCacheDataURL();
+      // prompt browser download
+      var element = document.createElement('a');
+      element.setAttribute('href', url);
+      element.setAttribute('download', 'mansion.png');
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      // refresh room container
+      this.roomContainer.uncache();
     }
 
     startMaze() {

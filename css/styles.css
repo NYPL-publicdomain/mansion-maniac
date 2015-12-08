@@ -23,6 +23,64 @@ body {
   font-size: 30px;
   color: white;
   padding-top: 20%;
+  background-color: rgba(0,0,0,.35);
+}
+
+#controls {
+  position: absolute;
+  bottom: 20px;
+  width: 380px;
+  font-family: "Input Mono Condensed","Courier New",monospace;
+  font-size: 30px;
+  text-align: center;
+  left: 50%;
+  margin-left: -190px;
+  height: 140px;
+}
+
+div.button {
+  width: 60px;
+  height: 40px;
+  background: white;
+  border-radius: 5px;
+  color: black;
+  font-size: 16px;
+  line-height: 20px;
+  cursor: pointer;
+  margin: 10px;
+  padding-top: 20px;
+}
+
+.zoom, .arrows, .save {
+  float: left;
+}
+
+.zoom {
+  width: 80px;
+}
+
+.arrows {
+  width: 220px;
+}
+
+.arrows .column {
+  float: left;
+  width: 70px;
+}
+
+.arrows .column:first-child, .arrows .column:last-child {
+  padding-top: 35px;
+}
+
+div.button:active {
+  background: gray;
+  color: white;
+}
+
+div.button span {
+  display: block;
+  line-height: normal;
+  clear: both;
 }
 
 .mansion {
