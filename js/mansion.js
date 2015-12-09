@@ -541,7 +541,8 @@ var Mansion;
             this.canvas.height = window.innerHeight;
         };
         Mansion.prototype.handleKeyUp = function (event) {
-            this.avatar.visible = false;
+            if (this.avatar)
+                this.avatar.visible = false;
         };
         Mansion.prototype.keyboardController = function (keys, repeat) {
             var _this = this;

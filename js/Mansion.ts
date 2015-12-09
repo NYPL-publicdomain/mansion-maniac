@@ -578,7 +578,7 @@ module Mansion {
     }
 
     handleKeyUp(event) {
-      this.avatar.visible = false;
+      if (this.avatar) this.avatar.visible = false;
     }
 
     keyboardController(keys, repeat) {
