@@ -31,7 +31,6 @@ module Mansion {
     constructor() {
       this.stage = new createjs.Stage("easelCanvas");
       createjs.Ticker.on("tick", this.handleTick, this);
-      createjs.Ticker.framerate = 30;
       window.onresize = this.handleResize.bind(this);
       this.keyboardController({
         68: () => { this.toggleDebug(); },
