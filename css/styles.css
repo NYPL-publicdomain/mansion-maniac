@@ -30,7 +30,7 @@ body {
   position: absolute;
   bottom: 20px;
   width: 380px;
-  font-family: "Input Mono Condensed","Courier New",monospace;
+  font-family: "Input Mono Condensed", "Courier New", Courier, monospace;
   font-size: 30px;
   text-align: center;
   left: 50%;
@@ -51,7 +51,7 @@ div.button {
   padding-top: 20px;
 }
 
-.zoom, .arrows, .save {
+.zoom, .arrows, .export {
   float: left;
 }
 
@@ -63,7 +63,7 @@ div.button {
   width: 220px;
 }
 
-.arrows .column {
+#controls .column {
   float: left;
   width: 70px;
 }
@@ -81,6 +81,7 @@ div.button span {
   display: block;
   line-height: normal;
   clear: both;
+  font-size: .7em;
 }
 
 .mansion {

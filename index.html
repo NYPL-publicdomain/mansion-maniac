@@ -19,22 +19,25 @@
   <canvas id="easelCanvas" class="mansion" width="100%" height="100%"></canvas>
   <div id="controls">
     <div class="zoom">
-      <div class="button zoomin" onclick="_maniac.zoomIn()">+</div>
-      <div class="button zoomout" onclick="_maniac.zoomOut()">-</div>
+      <div class="button zoomin" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('zoomin')">+</div>
+      <div class="button zoomout" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('zoomout')">-</div>
     </div>
     <div class="arrows">
       <div class="column">
-        <div class="button left" onclick="_maniac.left()">Left<span class="help">←</span></div>
+        <div class="button left" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('left')">Left<span class="help">←</span></div>
       </div>
       <div class="column">
-        <div class="button up" onclick="_maniac.up()">Up<span class="help">↑</span></div>
-        <div class="button down" onclick="_maniac.down()">Down<span class="help">↓</span></div>
+        <div class="button up" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('up')">Up<span class="help">↑</span></div>
+        <div class="button down" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('down')">Down<span class="help">↓</span></div>
       </div>
       <div class="column">
-        <div class="button right" onclick="_maniac.right()">Right<span class="help">→</span></div>
+        <div class="button right" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('right')">Right<span class="help">→</span></div>
       </div>
     </div>
-    <div class="button save" onclick="_maniac.saveMansion()">Save</div>
+    <div class="export">
+      <div class="button save" onclick="_maniac.saveMansion()">Save<span class="help">W</span></div>
+      <div class="button reset" onclick="_maniac.reset()">Reset<span class="help">Space</span></div>
+    </div>
   </div>
   <div id="loader">Loading...</div>
   <script src="js/lib/underscore-min.js"></script>
