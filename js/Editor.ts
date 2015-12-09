@@ -26,6 +26,8 @@ module Mansion {
     canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("easelCanvas");
 
     constructor() {
+      var persistedData = localStorage.getItem('roomData');
+      if (persistedData) this.roomItems = JSON.parse(persistedData);
       this.outputBoxElement = document.getElementById("output");
       this.saveButtonElement = document.getElementById("save");
       this.saveButtonElement.onclick = this.handleSaveClick.bind(this);
@@ -102,6 +104,7 @@ module Mansion {
         tiles[y][x] = this.tileType.substr(0, 1);
       }
       this.drawTiles();
+      localStorage.setItem('roomData', JSON.stringify(this.roomItems));
     }
 
     drawTiles() {
