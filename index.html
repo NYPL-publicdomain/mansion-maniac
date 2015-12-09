@@ -6,7 +6,8 @@
   <!-- Tell IE to use the latest, best version (or Chrome Frame if pre-IE11). -->
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <meta name="viewport" content="target-densitydpi=device-dpi,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Mansion Maniacs</title>
   <script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
   <script src="https://code.createjs.com/preloadjs-0.6.1.min.js"></script>
@@ -19,19 +20,19 @@
   <canvas id="easelCanvas" class="mansion" width="100%" height="100%"></canvas>
   <div id="controls">
     <div class="zoom">
-      <div class="button zoomin" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('zoomin')">+</div>
-      <div class="button zoomout" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('zoomout')">-</div>
+      <div class="button zoomin" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('zoomin')" ontouchstart="_maniac.startAction('zoomin')" ontouchend="_maniac.endAction()" ontouchcancel="_maniac.endAction()">+</div>
+      <div class="button zoomout" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('zoomout')" ontouchstart="_maniac.startAction('zoomout')" ontouchend="_maniac.endAction()" ontouchcancel="_maniac.endAction()">-</div>
     </div>
     <div class="arrows">
       <div class="column">
-        <div class="button left" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('left')">Left<span class="help">←</span></div>
+        <div class="button left" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('left')" ontouchstart="_maniac.startAction('left')" ontouchend="_maniac.endAction()" ontouchcancel="_maniac.endAction()">Left<span class="help">←</span></div>
       </div>
       <div class="column">
-        <div class="button up" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('up')">Up<span class="help">↑</span></div>
-        <div class="button down" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('down')">Down<span class="help">↓</span></div>
+        <div class="button up" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('up')" ontouchstart="_maniac.startAction('up')" ontouchend="_maniac.endAction()" ontouchcancel="_maniac.endAction()">Up<span class="help">↑</span></div>
+        <div class="button down" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('down')" ontouchstart="_maniac.startAction('down')" ontouchend="_maniac.endAction()" ontouchcancel="_maniac.endAction()">Down<span class="help">↓</span></div>
       </div>
       <div class="column">
-        <div class="button right" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('right')">Right<span class="help">→</span></div>
+        <div class="button right" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('right')" ontouchstart="_maniac.startAction('right')" ontouchend="_maniac.endAction()" ontouchcancel="_maniac.endAction()">Right<span class="help">→</span></div>
       </div>
     </div>
     <div class="export">
@@ -39,7 +40,11 @@
       <div class="button reset" onclick="_maniac.reset()">Reset<span class="help">Space</span></div>
     </div>
   </div>
-  <div id="loader">Loading...</div>
+  <div id="loader">
+    <h1>Mansion Maniac</h1>
+    <p>A small maze-building game that makes use of the NYPL's <a href="http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about">Apartment Houses of the Metropolis collection</a>.</p>
+    <div class="button" id="start-button">Loading...</div>
+  </div>
   <script src="js/lib/underscore-min.js"></script>
   <script src="js/mansion.js"></script>
   <script type="text/javascript">

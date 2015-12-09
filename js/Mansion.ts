@@ -104,8 +104,6 @@ module Mansion {
       this.stage.x = x;
       this.stage.y = y;
 
-      this.addAvatar();
-
       this.loadRooms();
     }
 
@@ -181,6 +179,7 @@ module Mansion {
     }
 
     startMaze() {
+      this.addAvatar();
       this.addBaseRoom();
       var width = this.mazeRooms[0].roomData.tiles[0].length * Config.AVATAR_SIZE;
       var height = this.mazeRooms[0].roomData.tiles.length * Config.AVATAR_SIZE;
@@ -536,8 +535,13 @@ module Mansion {
 
     handleLoadComplete(event) {
       console.log("complete!");
-      (<HTMLDivElement>document.getElementById("loader")).style.display = 'none';
-      this.startMaze();
+      var loader = <HTMLDivElement>document.getElementById("loader");
+      var button = <HTMLDivElement>document.getElementById("start-button");
+      button.innerHTML = 'Go!';
+      button.onclick = () => {
+        loader.style.display = 'none';
+        this.startMaze();
+      }
     }
 
     handleResize() {

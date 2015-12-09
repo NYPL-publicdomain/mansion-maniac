@@ -103,7 +103,6 @@ var Mansion;
             var y = Math.floor(this.canvas.height * .5);
             this.stage.x = x;
             this.stage.y = y;
-            this.addAvatar();
             this.loadRooms();
         };
         Mansion.prototype.reset = function () {
@@ -175,6 +174,7 @@ var Mansion;
             this.roomContainer.uncache();
         };
         Mansion.prototype.startMaze = function () {
+            this.addAvatar();
             this.addBaseRoom();
             var width = this.mazeRooms[0].roomData.tiles[0].length * Mansion_1.Config.AVATAR_SIZE;
             var height = this.mazeRooms[0].roomData.tiles.length * Mansion_1.Config.AVATAR_SIZE;
@@ -499,9 +499,15 @@ var Mansion;
             console.log(room);
         };
         Mansion.prototype.handleLoadComplete = function (event) {
+            var _this = this;
             console.log("complete!");
-            document.getElementById("loader").style.display = 'none';
-            this.startMaze();
+            var loader = document.getElementById("loader");
+            var button = document.getElementById("start-button");
+            button.innerHTML = 'Go!';
+            button.onclick = function () {
+                loader.style.display = 'none';
+                _this.startMaze();
+            };
         };
         Mansion.prototype.handleResize = function () {
             this.canvas.width = window.innerWidth;
