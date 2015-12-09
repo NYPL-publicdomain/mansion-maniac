@@ -24,13 +24,14 @@ module Mansion {
     minScale: number = 0.15;
     maxScale: number = 3;
     tapAction: string = "";
-    lastAction: number = 0;
+    actionDelay: number = 6;
+    actionInterval: number;
     canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("easelCanvas");
 
     constructor() {
       this.stage = new createjs.Stage("easelCanvas");
       createjs.Ticker.on("tick", this.handleTick, this);
-      createjs.Ticker.framerate = 60;
+      createjs.Ticker.framerate = 30;
       window.onresize = this.handleResize.bind(this);
       this.keyboardController({
         68: () => { this.toggleDebug(); },
@@ -51,10 +52,38 @@ module Mansion {
 
     endAction() {
       this.tapAction = "";
+      clearInterval(this.actionInterval);
     }
 
     startAction(action) {
       this.tapAction = action;
+      clearInterval(this.actionInterval);
+      this.actionInterval = setInterval( () => {this.executeAction()}, this.actionDelay);
+    }
+
+    executeAction() {
+      if (this.tapAction != "") {
+        switch (this.tapAction) {
+          case "zoomin":
+            this.zoomIn();
+            break;
+          case "zoomout":
+            this.zoomOut();
+            break;
+          case "left":
+            this.left();
+            break;
+          case "right":
+            this.right();
+            break;
+          case "up":
+            this.up();
+            break;
+          case "down":
+            this.down();
+            break;
+        }
+      }
     }
 
     zoomOut() {
@@ -599,29 +628,6 @@ module Mansion {
 
     handleTick(event) {
       // console.log("tick!", createjs.Ticker.getTime());
-      if (this.tapAction != "" && createjs.Ticker.getTime() - this.lastAction > this.keyDelay) {
-        this.lastAction = createjs.Ticker.getTime();
-        switch (this.tapAction) {
-          case "zoomin":
-            this.zoomIn();
-            break;
-          case "zoomout":
-            this.zoomOut();
-            break;
-          case "left":
-            this.left();
-            break;
-          case "right":
-            this.right();
-            break;
-          case "up":
-            this.up();
-            break;
-          case "down":
-            this.down();
-            break;
-        }
-      }
       this.stage.update();
       if (!event.paused) {
         //
