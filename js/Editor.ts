@@ -23,7 +23,10 @@ module Mansion {
     saveButtonElement;
     isDrawing: boolean = false;
     roomText: createjs.Text;
+    doorText: createjs.Text;
     persistedData: Array<RoomData>;
+    hCounts = {};
+    vCounts = {};
     canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("easelCanvas");
 
     constructor() {
@@ -239,6 +242,12 @@ module Mansion {
       this.roomText.y = this.roomY + Config.GRID_SIZE;
       this.stage.addChild(this.roomText);
 
+      this.doorText = new createjs.Text("", "14px Arial", "#ffffff");
+      this.doorText.x = Config.GRID_SIZE;
+      this.doorText.y = this.roomY + (Config.GRID_SIZE * 4);
+      this.doorText.lineWidth = (Config.GRID_SIZE * 8);
+      this.stage.addChild(this.doorText);
+
       this.stage.update();
     }
 
@@ -313,6 +322,7 @@ module Mansion {
       }
       var str = JSON.stringify(output);
       this.outputBoxElement.value = str;
+      this.checkDoors();
     }
 
     updateRoomDoors() {
@@ -362,8 +372,65 @@ module Mansion {
       };
     }
 
-    checkRoomIntegrity() {
-      
+    checkDoors() {
+      var topDoors: Array<Array<number>> = [], bottomDoors: Array<Array<number>> = [], leftDoors: Array<Array<number>> = [], rightDoors: Array<Array<number>> = [];
+      this.roomItems.forEach((room, index, array) => {
+          if (room.doors && room.doors.top) topDoors.push(room.doors.top);
+          if (room.doors && room.doors.bottom) bottomDoors.push(room.doors.bottom);
+          if (room.doors && room.doors.right) rightDoors.push(room.doors.right);
+          if (room.doors && room.doors.left) leftDoors.push(room.doors.left);
+      });
+      this.hCounts = {};
+      this.vCounts = {};
+      // count what type of doors we have
+      topDoors.forEach((value, index, array) => {
+        if (this.hCounts[value[1]] == undefined) {
+          this.hCounts[value[1]] = 1;
+        }
+      });
+      // subtract from the opposing wall doors
+      bottomDoors.forEach((value, index, array) => {
+        if (this.hCounts[value[1]] == undefined) {
+          this.hCounts[value[1]] = -1;
+        } else if (this.hCounts[value[1]] > -1) {
+          this.hCounts[value[1]] = 0;
+        }
+      });
+
+      // count what type of doors we have
+      leftDoors.forEach((value, index, array) => {
+        if (this.vCounts[value[1]] == undefined) {
+          this.vCounts[value[1]] = 1;
+        }
+      });
+      // subtract from the opposing wall doors
+      rightDoors.forEach((value, index, array) => {
+        if (this.vCounts[value[1]] == undefined) {
+          this.vCounts[value[1]] = -1;
+        } else if (this.vCounts[value[1]] > -1) {
+          this.vCounts[value[1]] = 0;
+        }
+      });
+
+      var status = "Missing:\n \n";
+      for (var length in this.hCounts) {
+        var offset = this.hCounts[length];
+        if (offset === 1) {
+            status += length + "px bottom door\n \n";
+        } else if (offset === -1) {
+            status += length + "px top door\n \n";
+        }
+      }
+      for (var length in this.vCounts) {
+          var offset = this.vCounts[length];
+          if (offset === 1) {
+              status += length + "px right door\n \n";
+          } else if (offset === -1) {
+              status += length + "px left door\n \n";
+          }
+      }
+      this.doorText.text = status;
+      this.stage.update();
     }
 
     getRoomByID(roomList: Array<RoomData>, id:string):RoomData {
@@ -474,7 +541,7 @@ module Mansion {
       var tiles = event.item.tiles;
       var doors = event.item.doors;
       var root = event.item.root;
-      if (savedRoom && tiles !== savedRoom.tiles) {
+      if (savedRoom && tiles != savedRoom.tiles) {
           tiles = savedRoom.tiles;
           doors = savedRoom.doors;
           root = savedRoom.root;

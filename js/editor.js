@@ -29,6 +29,8 @@ var Mansion;
             this.roomY = 160;
             this.tileType = "floor";
             this.isDrawing = false;
+            this.hCounts = {};
+            this.vCounts = {};
             this.canvas = document.getElementById("easelCanvas");
             var persistedData = localStorage.getItem('roomData');
             if (persistedData)
@@ -230,6 +232,11 @@ var Mansion;
             this.roomText.x = Mansion.Config.GRID_SIZE;
             this.roomText.y = this.roomY + Mansion.Config.GRID_SIZE;
             this.stage.addChild(this.roomText);
+            this.doorText = new createjs.Text("", "14px Arial", "#ffffff");
+            this.doorText.x = Mansion.Config.GRID_SIZE;
+            this.doorText.y = this.roomY + (Mansion.Config.GRID_SIZE * 4);
+            this.doorText.lineWidth = (Mansion.Config.GRID_SIZE * 8);
+            this.stage.addChild(this.doorText);
             this.stage.update();
         };
         Editor.prototype.drawGrid = function () {
@@ -302,6 +309,7 @@ var Mansion;
             };
             var str = JSON.stringify(output);
             this.outputBoxElement.value = str;
+            this.checkDoors();
         };
         Editor.prototype.updateRoomDoors = function () {
             var i, j, lastTile;
@@ -352,7 +360,72 @@ var Mansion;
                 left: left
             };
         };
-        Editor.prototype.checkRoomIntegrity = function () {
+        Editor.prototype.checkDoors = function () {
+            var _this = this;
+            var topDoors = [], bottomDoors = [], leftDoors = [], rightDoors = [];
+            this.roomItems.forEach(function (room, index, array) {
+                if (room.doors && room.doors.top)
+                    topDoors.push(room.doors.top);
+                if (room.doors && room.doors.bottom)
+                    bottomDoors.push(room.doors.bottom);
+                if (room.doors && room.doors.right)
+                    rightDoors.push(room.doors.right);
+                if (room.doors && room.doors.left)
+                    leftDoors.push(room.doors.left);
+            });
+            this.hCounts = {};
+            this.vCounts = {};
+            // count what type of doors we have
+            topDoors.forEach(function (value, index, array) {
+                if (_this.hCounts[value[1]] == undefined) {
+                    _this.hCounts[value[1]] = 1;
+                }
+            });
+            // subtract from the opposing wall doors
+            bottomDoors.forEach(function (value, index, array) {
+                if (_this.hCounts[value[1]] == undefined) {
+                    _this.hCounts[value[1]] = -1;
+                }
+                else if (_this.hCounts[value[1]] > -1) {
+                    _this.hCounts[value[1]] = 0;
+                }
+            });
+            // count what type of doors we have
+            leftDoors.forEach(function (value, index, array) {
+                if (_this.vCounts[value[1]] == undefined) {
+                    _this.vCounts[value[1]] = 1;
+                }
+            });
+            // subtract from the opposing wall doors
+            rightDoors.forEach(function (value, index, array) {
+                if (_this.vCounts[value[1]] == undefined) {
+                    _this.vCounts[value[1]] = -1;
+                }
+                else if (_this.vCounts[value[1]] > -1) {
+                    _this.vCounts[value[1]] = 0;
+                }
+            });
+            var status = "Missing:\n \n";
+            for (var length in this.hCounts) {
+                var offset = this.hCounts[length];
+                if (offset === 1) {
+                    status += length + "px bottom door\n \n";
+                }
+                else if (offset === -1) {
+                    status += length + "px top door\n \n";
+                }
+            }
+            for (var length in this.vCounts) {
+                var offset = this.vCounts[length];
+                if (offset === 1) {
+                    status += length + "px right door\n \n";
+                }
+                else if (offset === -1) {
+                    status += length + "px left door\n \n";
+                }
+            }
+            this.doorText.text = status;
+            this.stage.update();
         };
         Editor.prototype.getRoomByID = function (roomList, id) {
             var result;
@@ -468,7 +541,7 @@ var Mansion;
             var tiles = event.item.tiles;
             var doors = event.item.doors;
             var root = event.item.root;
-            if (savedRoom && tiles !== savedRoom.tiles) {
+            if (savedRoom && tiles != savedRoom.tiles) {
                 tiles = savedRoom.tiles;
                 doors = savedRoom.doors;
                 root = savedRoom.root;

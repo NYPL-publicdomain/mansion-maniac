@@ -1,5 +1,9 @@
 ///<reference path='typings/tsd.d.ts' />
 
+interface Console {
+  table : (any);
+}
+
 module Mansion {
 
   export class Config {
