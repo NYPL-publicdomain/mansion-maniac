@@ -32,7 +32,7 @@ var Mansion;
             this.canvas = document.getElementById("easelCanvas");
             var persistedData = localStorage.getItem('roomData');
             if (persistedData)
-                this.roomItems = JSON.parse(persistedData);
+                this.persistedData = JSON.parse(persistedData);
             this.outputBoxElement = document.getElementById("output");
             this.saveButtonElement = document.getElementById("save");
             this.saveButtonElement.onclick = this.handleSaveClick.bind(this);
@@ -262,6 +262,7 @@ var Mansion;
             this.stage.update();
         };
         Editor.prototype.loadRooms = function () {
+            this.roomItems = [];
             this.roomQueue = new createjs.LoadQueue(false);
             this.roomQueue.on("fileload", this.handleLoadRoom, this);
             this.roomQueue.on("complete", this.handleLoadComplete, this);
@@ -351,6 +352,14 @@ var Mansion;
                 left: left
             };
         };
+        Editor.prototype.getRoomByID = function (roomList, id) {
+            var result;
+            roomList.forEach(function (room, index, array) {
+                if (room.id === id)
+                    result = room;
+            });
+            return result;
+        };
         Editor.prototype.handleSaveClick = function (event) {
             var output = {
                 "path": "slices/",
@@ -363,6 +372,7 @@ var Mansion;
             element.style.display = 'none';
             document.body.appendChild(element);
             element.click();
+            element.remove();
         };
         Editor.prototype.handleStageMouseMove = function (event) {
             var x = event.stageX;
@@ -450,13 +460,22 @@ var Mansion;
             room.x = this.roomX; // this.canvasWidth * .5 - room.getBounds().width * .5;
             room.y = this.roomY; // this.canvasHeight * .5 - room.getBounds().height * .5;
             this.roomBitmaps.push(room);
+            var savedRoom = this.getRoomByID(this.persistedData, event.item.id);
+            var tiles = event.item.tiles;
+            var doors = event.item.doors;
+            var root = event.item.root;
+            if (savedRoom && tiles !== savedRoom.tiles) {
+                tiles = savedRoom.tiles;
+                doors = savedRoom.doors;
+                root = savedRoom.root;
+            }
             var data = {
                 id: event.item.id,
                 src: event.item.src.replace(event.item.path, ""),
                 bitmap: {},
-                root: event.item.root,
-                tiles: event.item.tiles,
-                doors: event.item.doors
+                root: root,
+                tiles: tiles,
+                doors: doors
             };
             this.roomItems.push(data);
             console.log(event.item.src);
