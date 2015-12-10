@@ -362,8 +362,13 @@ module Mansion {
       };
     }
 
+    checkRoomIntegrity() {
+      
+    }
+
     getRoomByID(roomList: Array<RoomData>, id:string):RoomData {
       var result;
+      if (!roomList || roomList.length) return;
       roomList.forEach((room, index, array) => {
           if (room.id === id) result = room;
       });

@@ -352,8 +352,12 @@ var Mansion;
                 left: left
             };
         };
+        Editor.prototype.checkRoomIntegrity = function () {
+        };
         Editor.prototype.getRoomByID = function (roomList, id) {
             var result;
+            if (!roomList || roomList.length)
+                return;
             roomList.forEach(function (room, index, array) {
                 if (room.id === id)
                     result = room;
