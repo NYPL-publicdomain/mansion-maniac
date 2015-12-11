@@ -134,7 +134,7 @@ var Mansion;
             this.loadRooms();
         };
         Mansion.prototype.reset = function () {
-            if (loading || createjs.Ticker.getTime() - this.lastReset < 500)
+            if (this.loading || createjs.Ticker.getTime() - this.lastReset < 500)
                 return;
             this.lastReset = createjs.Ticker.getTime();
             this.roomContainer.removeAllChildren();
@@ -179,7 +179,7 @@ var Mansion;
             this.avatar.visible = false;
         };
         Mansion.prototype.saveMansion = function () {
-            if (loading || createjs.Ticker.getTime() - this.lastSave < 500)
+            if (this.loading || createjs.Ticker.getTime() - this.lastSave < 500)
                 return;
             this.lastSave = createjs.Ticker.getTime();
             // save the room container as a bitmap

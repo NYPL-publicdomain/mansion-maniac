@@ -137,7 +137,7 @@ module Mansion {
     }
 
     reset() {
-      if (loading || createjs.Ticker.getTime() - this.lastReset < 500) return;
+        if (this.loading || createjs.Ticker.getTime() - this.lastReset < 500) return;
       this.lastReset = createjs.Ticker.getTime();
       this.roomContainer.removeAllChildren();
       this.tileShape.graphics.clear();
@@ -186,7 +186,7 @@ module Mansion {
     }
 
     saveMansion() {
-      if (loading || createjs.Ticker.getTime() - this.lastSave < 500) return;
+        if (this.loading || createjs.Ticker.getTime() - this.lastSave < 500) return;
       this.lastSave = createjs.Ticker.getTime();
       // save the room container as a bitmap
       var bounds = this.roomContainer.getBounds();
