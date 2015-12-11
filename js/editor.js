@@ -139,6 +139,7 @@ var Mansion;
             }
             g.ef();
             this.tileShape.graphics = g;
+            this.checkDoors();
             this.stage.update();
         };
         Editor.prototype.updateCursor = function (type) {

@@ -141,6 +141,7 @@ module Mansion {
       }
       g.ef();
       this.tileShape.graphics = g;
+      this.checkDoors();
       this.stage.update();
     }
 
