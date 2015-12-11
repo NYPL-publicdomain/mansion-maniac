@@ -9,7 +9,7 @@ var Mansion;
         Config.DOOR_COLOR = "#00ffff";
         Config.DELETE_COLOR = "#000000";
         Config.GRID_SIZE = 20;
-        Config.AVATAR_SIZE = 18;
+        Config.AVATAR_SIZE = 16;
         return Config;
     })();
     Mansion.Config = Config;
@@ -35,6 +35,7 @@ var Mansion;
             this.maxScale = 3;
             this.tapAction = "";
             this.actionDelay = 6;
+            this.loading = true;
             this.canvas = document.getElementById("easelCanvas");
             this.stage = new createjs.Stage("easelCanvas");
             createjs.Ticker.on("tick", this.handleTick, this);
@@ -133,16 +134,13 @@ var Mansion;
             this.loadRooms();
         };
         Mansion.prototype.reset = function () {
-            if (createjs.Ticker.getTime() - this.lastReset < 500)
+            if (loading || createjs.Ticker.getTime() - this.lastReset < 500)
                 return;
             this.lastReset = createjs.Ticker.getTime();
             this.roomContainer.removeAllChildren();
             this.tileShape.graphics.clear();
             this.mazeRooms = [];
-            this.addBaseRoom();
-            var width = this.mazeRooms[0].roomData.tiles[0].length * Mansion_1.Config.AVATAR_SIZE;
-            var height = this.mazeRooms[0].roomData.tiles.length * Mansion_1.Config.AVATAR_SIZE;
-            this.panTo((-width * .5), (-height * .5));
+            this.startMaze();
         };
         Mansion.prototype.addAvatar = function () {
             // put avatar
@@ -181,7 +179,7 @@ var Mansion;
             this.avatar.visible = false;
         };
         Mansion.prototype.saveMansion = function () {
-            if (createjs.Ticker.getTime() - this.lastSave < 500)
+            if (loading || createjs.Ticker.getTime() - this.lastSave < 500)
                 return;
             this.lastSave = createjs.Ticker.getTime();
             // save the room container as a bitmap
@@ -201,10 +199,9 @@ var Mansion;
             this.roomContainer.uncache();
         };
         Mansion.prototype.startMaze = function () {
-            this.addAvatar();
             this.addBaseRoom();
-            var width = this.mazeRooms[0].roomData.tiles[0].length * Mansion_1.Config.AVATAR_SIZE;
-            var height = this.mazeRooms[0].roomData.tiles.length * Mansion_1.Config.AVATAR_SIZE;
+            var width = this.roomContainer.getBounds().width;
+            var height = this.roomContainer.getBounds().height;
             this.panTo((-width * .5), (-height * .5));
         };
         Mansion.prototype.right = function () {
@@ -532,7 +529,9 @@ var Mansion;
             var button = document.getElementById("start-button");
             button.innerHTML = 'Go!';
             button.onclick = function () {
+                _this.loading = false;
                 loader.style.display = 'none';
+                _this.addAvatar();
                 _this.startMaze();
             };
         };

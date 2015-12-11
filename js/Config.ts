@@ -12,7 +12,7 @@ module Mansion {
     public static DOOR_COLOR: string = "#00ffff";
     public static DELETE_COLOR: string = "#000000";
     public static GRID_SIZE: number = 20;
-    public static AVATAR_SIZE: number = 18;
+    public static AVATAR_SIZE: number = 16;
   }
 
   export interface DoorData {

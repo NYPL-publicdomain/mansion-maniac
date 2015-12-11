@@ -168,7 +168,7 @@ module Mansion {
     drawUI() {
       var g, text;
       g = new createjs.Graphics();
-      g.f(Config.WALL_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
+      g.f(Config.WALL_COLOR).r(0, 0, Config.GRID_SIZE * 4, Config.GRID_SIZE);
       var wallButton = new createjs.Shape(g);
       wallButton.name = "wall";
       wallButton.cursor = "pointer";
@@ -177,12 +177,26 @@ module Mansion {
       this.stage.addChild(wallButton);
       wallButton.on("click", this.handleTileButtonClick, this);
       text = new createjs.Text("Wall", "16px Arial", Config.DELETE_COLOR);
-      text.x = Config.GRID_SIZE * 3;
+      text.x = Config.GRID_SIZE * 2;
       text.y = Config.GRID_SIZE + 2;
       this.stage.addChild(text);
 
       g = new createjs.Graphics();
-      g.f(Config.FLOOR_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
+      g.f(Config.WALL_COLOR).r(0, 0, Config.GRID_SIZE * 3, Config.GRID_SIZE);
+      var wallFillButton = new createjs.Shape(g);
+      wallFillButton.name = "wall";
+      wallFillButton.cursor = "pointer";
+      wallFillButton.x = Config.GRID_SIZE * 6;
+      wallFillButton.y = Config.GRID_SIZE;
+      this.stage.addChild(wallFillButton);
+      wallFillButton.on("click", this.handleFillButtonClick, this);
+      text = new createjs.Text("Fill", "16px Arial", Config.DELETE_COLOR);
+      text.x = Config.GRID_SIZE * 7;
+      text.y = Config.GRID_SIZE + 2;
+      this.stage.addChild(text);
+
+      g = new createjs.Graphics();
+      g.f(Config.FLOOR_COLOR).r(0, 0, Config.GRID_SIZE * 4, Config.GRID_SIZE);
       var floorButton = new createjs.Shape(g);
       floorButton.name = "floor";
       floorButton.cursor = "pointer";
@@ -191,12 +205,26 @@ module Mansion {
       this.stage.addChild(floorButton);
       floorButton.on("click", this.handleTileButtonClick, this);
       text = new createjs.Text("Floor", "16px Arial", Config.DELETE_COLOR);
-      text.x = Config.GRID_SIZE * 3;
+      text.x = Config.GRID_SIZE * 2;
       text.y = Config.GRID_SIZE * 2 + 2;
       this.stage.addChild(text);
 
       g = new createjs.Graphics();
-      g.f(Config.DOOR_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
+      g.f(Config.FLOOR_COLOR).r(0, 0, Config.GRID_SIZE * 3, Config.GRID_SIZE);
+      var floorFillButton = new createjs.Shape(g);
+      floorFillButton.name = "floor";
+      floorFillButton.cursor = "pointer";
+      floorFillButton.x = Config.GRID_SIZE * 6;
+      floorFillButton.y = Config.GRID_SIZE * 2;
+      this.stage.addChild(floorFillButton);
+      floorFillButton.on("click", this.handleFillButtonClick, this);
+      text = new createjs.Text("Fill", "16px Arial", Config.DELETE_COLOR);
+      text.x = Config.GRID_SIZE * 7;
+      text.y = Config.GRID_SIZE * 2 + 2;
+      this.stage.addChild(text);
+
+      g = new createjs.Graphics();
+      g.f(Config.DOOR_COLOR).r(0, 0, Config.GRID_SIZE * 4, Config.GRID_SIZE);
       var doorButton = new createjs.Shape(g);
       doorButton.name = "door";
       doorButton.cursor = "pointer";
@@ -205,12 +233,12 @@ module Mansion {
       this.stage.addChild(doorButton);
       doorButton.on("click", this.handleTileButtonClick, this);
       text = new createjs.Text("Door", "16px Arial", Config.DELETE_COLOR);
-      text.x = Config.GRID_SIZE * 3;
+      text.x = Config.GRID_SIZE * 2;
       text.y = Config.GRID_SIZE * 3 + 2;
       this.stage.addChild(text);
 
       g = new createjs.Graphics();
-      g.f(Config.DELETE_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
+      g.f(Config.DELETE_COLOR).r(0, 0, Config.GRID_SIZE * 4, Config.GRID_SIZE);
       var deleteButton = new createjs.Shape(g);
       deleteButton.name = "delete";
       deleteButton.cursor = "pointer";
@@ -219,12 +247,12 @@ module Mansion {
       this.stage.addChild(deleteButton);
       deleteButton.on("click", this.handleTileButtonClick, this);
       text = new createjs.Text("Delete", "16px Arial", Config.FLOOR_COLOR);
-      text.x = Config.GRID_SIZE * 3;
+      text.x = Config.GRID_SIZE * 2;
       text.y = Config.GRID_SIZE * 4 + 2;
       this.stage.addChild(text);
 
       g = new createjs.Graphics();
-      g.f(Config.DELETE_COLOR).r(0, 0, Config.GRID_SIZE * 6, Config.GRID_SIZE);
+      g.f(Config.DELETE_COLOR).r(0, 0, Config.GRID_SIZE * 4, Config.GRID_SIZE);
       var clearButton = new createjs.Shape(g);
       clearButton.name = "clear";
       clearButton.cursor = "pointer";
@@ -233,7 +261,7 @@ module Mansion {
       this.stage.addChild(clearButton);
       clearButton.on("click", this.clearTiles, this);
       text = new createjs.Text("Clear", "16px Arial", Config.FLOOR_COLOR);
-      text.x = Config.GRID_SIZE * 3;
+      text.x = Config.GRID_SIZE * 2;
       text.y = Config.GRID_SIZE * 6 + 2;
       this.stage.addChild(text);
 
@@ -502,6 +530,24 @@ module Mansion {
 
     handleTileButtonClick(event: createjs.MouseEvent) {
       this.updateCursor(event.target.name);
+    }
+
+    handleFillButtonClick(event: createjs.MouseEvent) {
+      this.updateCursor(event.target.name);
+      var i, j;
+      var bounds = this.roomContainer.getBounds();
+      var maxTileX = Math.floor(bounds.width / Config.GRID_SIZE);
+      var maxTileY = Math.floor(bounds.height / Config.GRID_SIZE);
+      var tiles = this.roomItems[this.currentRoom].tiles;
+      for (i = 0; i < maxTileY; i++) {
+        if (tiles[i] === undefined || tiles[i] === null) {
+            tiles[i] = [];
+        }
+        for (j = 0; j < maxTileX; j++) {
+          tiles[i][j] = this.tileType.substr(0, 1);
+        }
+      }
+      this.drawTiles();
     }
 
     handleKeyDown(event) {

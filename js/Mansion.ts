@@ -26,6 +26,7 @@ module Mansion {
     tapAction: string = "";
     actionDelay: number = 6;
     actionInterval: number;
+    loading: boolean = true;
     canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("easelCanvas");
 
     constructor() {
@@ -136,15 +137,12 @@ module Mansion {
     }
 
     reset() {
-      if (createjs.Ticker.getTime() - this.lastReset < 500) return;
+      if (loading || createjs.Ticker.getTime() - this.lastReset < 500) return;
       this.lastReset = createjs.Ticker.getTime();
       this.roomContainer.removeAllChildren();
       this.tileShape.graphics.clear();
       this.mazeRooms = [];
-      this.addBaseRoom();
-      var width = this.mazeRooms[0].roomData.tiles[0].length * Config.AVATAR_SIZE;
-      var height = this.mazeRooms[0].roomData.tiles.length * Config.AVATAR_SIZE;
-      this.panTo((-width * .5), (-height * .5));
+      this.startMaze();
     }
 
     addAvatar() {
@@ -188,7 +186,7 @@ module Mansion {
     }
 
     saveMansion() {
-      if (createjs.Ticker.getTime() - this.lastSave < 500) return;
+      if (loading || createjs.Ticker.getTime() - this.lastSave < 500) return;
       this.lastSave = createjs.Ticker.getTime();
       // save the room container as a bitmap
       var bounds = this.roomContainer.getBounds();
@@ -207,10 +205,9 @@ module Mansion {
     }
 
     startMaze() {
-      this.addAvatar();
       this.addBaseRoom();
-      var width = this.mazeRooms[0].roomData.tiles[0].length * Config.AVATAR_SIZE;
-      var height = this.mazeRooms[0].roomData.tiles.length * Config.AVATAR_SIZE;
+      var width = this.roomContainer.getBounds().width;
+      var height = this.roomContainer.getBounds().height;
       this.panTo((-width * .5), (-height * .5));
     }
 
@@ -567,7 +564,9 @@ module Mansion {
       var button = <HTMLDivElement>document.getElementById("start-button");
       button.innerHTML = 'Go!';
       button.onclick = () => {
+        this.loading = false;
         loader.style.display = 'none';
+        this.addAvatar();
         this.startMaze();
       }
     }
