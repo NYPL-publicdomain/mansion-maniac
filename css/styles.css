@@ -19,11 +19,15 @@ body {
   bottom: 0;
   text-align: center;
   z-index: 11;
-  font-family: 'Input Mono Condensed', 'Courier New', monospace;
+  font-family: 'kepler-std-display', 'Times New Roman', Times, serif;
   font-size: 24px;
   color: white;
   padding-top: 20%;
   background-color: rgba(0,0,0,.35);
+}
+
+#loader h1 {
+  font-weight: 700;
 }
 
 #loader h1 , #loader p, #loader div {
