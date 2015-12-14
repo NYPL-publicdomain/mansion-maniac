@@ -27,6 +27,7 @@ module Mansion {
     actionDelay: number = 6;
     actionInterval: number;
     loading: boolean = true;
+    catSprite: createjs.Sprite;
     canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("easelCanvas");
 
     constructor() {
@@ -553,6 +554,25 @@ module Mansion {
         }
       }
       return index;
+    }
+
+    loadCat() {
+        var data = {
+            images: ["images/cat.png"],
+            frames: { width: 60, height: 60 },
+            animations: {
+                stand: 0,
+                walk: {
+                  frames: [1,2,3,2,1],
+                  speed: 0.5
+                }
+            }
+        };
+        var spriteSheet = new createjs.SpriteSheet(data);
+        this.catSprite = new createjs.Sprite(spriteSheet);
+        this.catSprite.x = -30;
+        this.catSprite.y = -30;
+        this.stage.addChild(this.catSprite);
     }
 
     loadRooms() {

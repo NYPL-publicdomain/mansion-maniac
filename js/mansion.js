@@ -517,6 +517,24 @@ var Mansion;
             }
             return index;
         };
+        Mansion.prototype.loadCat = function () {
+            var data = {
+                images: ["images/cat.png"],
+                frames: { width: 60, height: 60 },
+                animations: {
+                    stand: 0,
+                    walk: {
+                        frames: [1, 2, 3, 2, 1],
+                        speed: 0.5
+                    }
+                }
+            };
+            var spriteSheet = new createjs.SpriteSheet(data);
+            this.catSprite = new createjs.Sprite(spriteSheet);
+            this.catSprite.x = -30;
+            this.catSprite.y = -30;
+            this.stage.addChild(this.catSprite);
+        };
         Mansion.prototype.loadRooms = function () {
             this.roomQueue = new createjs.LoadQueue(false);
             this.roomQueue.on("fileload", this.handleLoadRoom, this);
