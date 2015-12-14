@@ -1,5 +1,23 @@
+@font-face {
+  font-family: 'Forum-Regular';
+  src: url('forum/Forum-Regular.otf');
+}
+
 body {
   background-color: black;
+}
+
+a {
+  color: #900;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #600;
+}
+
+a:hover {
+  color: #fff;
 }
 
 .editor {
@@ -11,6 +29,23 @@ body {
   /*top: 10px;*/
 }
 
+#credits {
+  position: absolute;
+  z-index: 71;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgb(201, 193, 173);
+  color: black;
+  padding: 5px;
+  font-family: 'Forum-Regular', 'Times New Roman', Times, serif;
+  text-align: center;
+}
+
+#credits a:hover {
+  color: #d00;
+}
+
 #loader {
   position: absolute;
   left: 0;
@@ -19,15 +54,15 @@ body {
   bottom: 0;
   text-align: center;
   z-index: 11;
-  font-family: 'kepler-std-display', 'Times New Roman', Times, serif;
+  font-family: 'Forum-Regular', 'Times New Roman', Times, serif;
   font-size: 24px;
-  color: white;
+  color: #222;
   padding-top: 20%;
   background-color: rgba(0,0,0,.35);
 }
 
 #loader h1 {
-  font-weight: 700;
+  text-transform: uppercase;
 }
 
 #loader h1 , #loader p, #loader div {
@@ -39,11 +74,12 @@ body {
 
 #loader .button {
   border-radius: 5px;
-  background-color: white;
+  background-color: #EFE7D4;
   display: inline;
-  color: black;
+  color: #333;
   padding: 6px 20px 8px;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 #loader .button:hover{
@@ -58,7 +94,6 @@ body {
 
 #loader a {
   text-decoration: none;
-  color: #900;
 }
 
 #controls {

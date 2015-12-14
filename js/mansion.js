@@ -186,19 +186,20 @@ var Mansion;
             var bounds = this.roomContainer.getBounds();
             if (!bounds)
                 return;
-            var shadow = new createjs.Shadow("#000000", -2, 2, 2);
-            var watermark = new createjs.Text("My Mansion", "700 24px 'kepler-std-display', Times, 'Times New Roman', serif", "#ffffff");
-            this.roomContainer.addChild(watermark);
-            var waterBounds = watermark.getBounds();
-            watermark.x = bounds.x + (-waterBounds.width * .5) + bounds.width * .5;
-            watermark.y = bounds.y + (-waterBounds.height * .5) + bounds.height * .5;
-            watermark.shadow = shadow;
-            var footer = new createjs.Text("Rooms from the “Apartment Houses of the Metropolis” collection in the New York Public Library (1908-1913)", "300 14px 'kepler-std-display', Times, 'Times New Roman', serif", "#ffffff");
-            this.roomContainer.addChild(footer);
-            var footerBounds = footer.getBounds();
-            footer.x = bounds.x + (-footerBounds.width * .5) + bounds.width * .5;
-            footer.y = bounds.y - footerBounds.height + bounds.height;
-            footer.shadow = shadow;
+            // var shadow = new createjs.Shadow("#000000", -2, 2, 2);
+            // var watermark = new createjs.Text("My Mansion", "24px 'Forum-Regular', 'Times New Roman', Times, serif", "#ffffff");
+            // this.roomContainer.addChild(watermark);
+            // var waterBounds = watermark.getBounds();
+            // watermark.x = bounds.x + (-waterBounds.width * .5) + bounds.width * .5;
+            // watermark.y = bounds.y + (-waterBounds.height * .5) + bounds.height * .5;
+            // watermark.shadow = shadow;
+            // var footer = new createjs.Text("Rooms from the “Apartment Houses of the Metropolis” collection\nin the New York Public Library (1908-1913)", "14px 'Forum-Regular', 'Times New Roman', Times, serif", "#ffffff");
+            // footer.textAlign = "center";
+            // this.roomContainer.addChild(footer);
+            // var footerBounds = footer.getBounds();
+            // footer.x = bounds.x + (-footerBounds.width * .5) + bounds.width * .5;
+            // footer.y = bounds.y -footerBounds.height + bounds.height;
+            // footer.shadow = shadow;
             this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
             var url = this.roomContainer.getCacheDataURL();
             // prompt browser download
@@ -209,8 +210,8 @@ var Mansion;
             document.body.appendChild(element);
             element.click();
             // refresh room container
-            this.roomContainer.removeChild(watermark);
-            this.roomContainer.removeChild(footer);
+            // this.roomContainer.removeChild(watermark);
+            // this.roomContainer.removeChild(footer);
             this.roomContainer.uncache();
         };
         Mansion.prototype.startMaze = function () {
