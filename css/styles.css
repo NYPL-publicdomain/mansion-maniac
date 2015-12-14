@@ -67,8 +67,8 @@ a:hover {
 
 #loader h1 , #loader p, #loader div {
   margin-bottom: 1em;
-  margin-right: auto; 
-  margin-left: auto; 
+  margin-right: auto;
+  margin-left: auto;
   max-width: 600px;
 }
 
@@ -94,6 +94,21 @@ a:hover {
 
 #loader a {
   text-decoration: none;
+}
+
+#loader .total {
+  height: 5px;
+  width: 50%;
+  clear: both;
+  border-radius: 5px;
+  background-color: #545046;
+}
+
+#loader #progress {
+  height: 5px;
+  display: block;
+  border-radius: 5px;
+  background-color: #EFE7D4;
 }
 
 #controls {

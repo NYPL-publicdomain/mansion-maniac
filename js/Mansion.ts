@@ -559,7 +559,13 @@ module Mansion {
       this.roomQueue = new createjs.LoadQueue(false);
       this.roomQueue.on("fileload", this.handleLoadRoom, this);
       this.roomQueue.on("complete", this.handleLoadComplete, this);
+      this.roomQueue.on("progress", this.handleProgress, this);
       this.roomQueue.loadManifest("js/rooms.json?i=" + (Math.random()*10000));
+    }
+
+    handleProgress(loaded: ProgressEvent) {
+        var progress = <HTMLDivElement>document.getElementById("progress");
+        progress.style.width = (loaded.loaded * 100) + "%";
     }
 
     handleLoadRoom(event) {
