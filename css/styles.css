@@ -175,16 +175,25 @@ a:hover {
   }
 
   #loader h1 {
-    font-size: 6vw;
-    width: 60%;
+    font-size: 7.5vw;
+    line-height: 9vw;
+    width: auto;
+    text-align: center;
+    padding: 0;
+    padding-top: 2em;
   }
 
   #loader .description {
     padding-bottom: 20px;
-    margin-left: 10%;
-    margin-right: 25%;
-    font-size: 24px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 16px;
     margin-top: 10%;
+    width: 75%;
+  }
+
+  #loader .mansion {
+    background-size: cover;
   }
 }
 
