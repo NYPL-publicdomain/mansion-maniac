@@ -118,9 +118,10 @@ a:hover {
 
 #loader .button {
   border-radius: 5px;
-  background-color: #EFE7D4;
+  background-color: #900;
   display: inline;
-  color: #333;
+  font-size: 24px;
+  color: #ddd;
   padding: 6px 20px 8px;
   cursor: pointer;
   text-transform: uppercase;
