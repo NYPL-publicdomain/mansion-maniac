@@ -85,7 +85,7 @@ a:hover {
 }
 
 #loader .mansion {
-  background: transparent url("../images/mansion.jpg") no-repeat scroll 0% 0% / 100% auto;
+  background: rgba(38, 34, 33, 1) url("../images/mansion.jpg") no-repeat scroll 0% 0% / 100% auto;
   height: 100%;
   margin: 0;
 }
@@ -96,8 +96,8 @@ a:hover {
   margin-right: 190px;
   font-size: 18px;
   background-color: rgba(242, 233, 202, 0.85);
-  border-top: 1px solid black;
-  border-bottom: 5px solid black;
+  border-top: 5px solid black;
+  border-bottom: 10px solid black;
   margin-top: 105px;
 }
 
@@ -165,6 +165,27 @@ a:hover {
   left: 50%;
   margin-left: -190px;
   height: 140px;
+}
+
+@media (max-width: 800px) {
+  #loader .wrapper {
+    width: auto;
+    margin: 0 auto;
+    height: 100%;
+  }
+
+  #loader h1 {
+    font-size: 6vw;
+    width: 60%;
+  }
+
+  #loader .description {
+    padding-bottom: 20px;
+    margin-left: 10%;
+    margin-right: 25%;
+    font-size: 24px;
+    margin-top: 10%;
+  }
 }
 
 #controls .button {
