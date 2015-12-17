@@ -17,6 +17,7 @@
 </head>
 <body>
   <canvas id="easelCanvas" class="mansion" width="100%" height="100%"></canvas>
+  <div id="score">0 ft<sup>2</sup> (0 m<sup>2</sup>)</div>
   <div id="controls">
     <div class="zoom">
       <div class="button zoomin" onmouseout="_maniac.endAction()" onmouseup="_maniac.endAction()" onmousedown="_maniac.startAction('zoomin')" ontouchstart="_maniac.startAction('zoomin')" ontouchend="_maniac.endAction()" ontouchcancel="_maniac.endAction()">+</div>
@@ -40,7 +41,7 @@
     </div>
   </div>
   <div id="credits">
-    An <a href="http://labs.nypl.org">NYPL Labs</a> project by <a href="//twitter.com/mgiraldo">Mauricio Giraldo</a> using public domain digital assets from the <a href="http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about">Apartment Houses of the Metropolis collection</a>. <a href="//github.com/nypl/mansion-maniac">View source code</a>.
+    An <a href="http://labs.nypl.org">NYPL Labs</a> project by <a href="//twitter.com/mgiraldo">Mauricio Giraldo</a> using <a href="https://github.com/NYPL-publicdomain">public domain digital assets</a> from the <a href="http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about">Apartment Houses of the Metropolis collection</a>. <a href="//github.com/nypl/mansion-maniac">View source code</a>.
   </div>
   <div id="loader">
     <div class="wrapper">
@@ -55,6 +56,12 @@
       </div>
     </div>
   </div>
+  <!-- <div id="save-page">
+    <h1>YOUR MANSION</h1>
+    <p>You created a mansion with X rooms and Y ft<sup>2</sup> (Z m<sup>2</sup>).</p>
+    <p><a href="http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about">View the original images used</a></p>
+    <img id="mansion" width="800" />
+  </div> -->
   <script src="js/lib/underscore-min.js"></script>
   <script src="js/mansion.js"></script>
   <script type="text/javascript">

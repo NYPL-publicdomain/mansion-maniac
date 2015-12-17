@@ -20,6 +20,10 @@ a:hover {
   color: #fff;
 }
 
+small, sub, sup { font-size: .83em }
+sub             { vertical-align: sub }
+sup             { vertical-align: super }
+
 .editor {
   /*position: absolute;*/
   background-color: #666;
@@ -250,6 +254,37 @@ div.button span {
   display: block;
   /*cursor: none;*/
 }
+
+#score {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 24px;
+  font-family: 'Input Mono Condensed', 'Courier New', monospace;
+  color: #fff;
+  text-shadow: -1px 1px 2px #333;
+  z-index: 11;
+}
+
+#save-page {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 11;
+  font-family: 'Forum-Regular', 'Times New Roman', Times, serif;
+  font-size: 18px;
+  color: #222;
+  background-color: rgb(201, 193, 173);
+  padding: 40px;
+  overflow: scroll;
+}
+
+/* editor stuff */
 
 #output {
   position: absolute;

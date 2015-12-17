@@ -219,6 +219,7 @@ var Mansion;
             var width = this.roomContainer.getBounds().width;
             var height = this.roomContainer.getBounds().height;
             this.panTo((-width * .5), (-height * .5));
+            this.updateScore();
         };
         Mansion.prototype.right = function () {
             this.avatar.rotation = 90;
@@ -326,6 +327,7 @@ var Mansion;
             }
             var newRoom = this.createRoomBitmap(complementRoom, x, y);
             newRoom.doorsUsed[newPos] = complementDoorPos;
+            this.updateScore();
         };
         Mansion.prototype.createRoomBitmap = function (roomData, x, y) {
             var gs = Mansion_1.Config.GRID_SIZE;
@@ -516,6 +518,18 @@ var Mansion;
                 }
             }
             return index;
+        };
+        Mansion.prototype.updateScore = function () {
+            var score = document.getElementById("score");
+            var sqft = 0;
+            for (var room in this.mazeRooms) {
+                var tiles = this.mazeRooms[room].roomData.tiles;
+                var area = tiles.length * tiles[0].length;
+                sqft += area;
+            }
+            var sqm = Math.round(sqft * 0.09);
+            var str = '~' + sqm + ' m<sup>2</sup> (~' + sqft + ' ft<sup>2</sup>)';
+            score.innerHTML = str;
         };
         Mansion.prototype.loadCat = function () {
             var data = {

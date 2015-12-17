@@ -229,6 +229,7 @@ module Mansion {
       var width = this.roomContainer.getBounds().width;
       var height = this.roomContainer.getBounds().height;
       this.panTo((-width * .5), (-height * .5));
+      this.updateScore();
     }
 
     right() {
@@ -345,6 +346,7 @@ module Mansion {
 
       var newRoom = this.createRoomBitmap(complementRoom, x, y);
       newRoom.doorsUsed[newPos] = complementDoorPos;
+      this.updateScore();
     }
 
     createRoomBitmap(roomData: RoomData, x: number, y: number): MansionRoomData {
@@ -554,6 +556,19 @@ module Mansion {
         }
       }
       return index;
+    }
+
+    updateScore() {
+      var score = <HTMLDivElement>document.getElementById("score");
+      var sqft = 0;
+      for (var room in this.mazeRooms) {
+        var tiles = this.mazeRooms[room].roomData.tiles
+        var area = tiles.length * tiles[0].length;
+        sqft += area;
+      }
+      var sqm = Math.round(sqft * 0.09);
+      var str = '~' + sqm + ' m<sup>2</sup> (~' + sqft + ' ft<sup>2</sup>)';
+      score.innerHTML = str;
     }
 
     loadCat() {
