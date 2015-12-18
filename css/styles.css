@@ -297,6 +297,12 @@ div.button span {
   max-width: 800px;
 }
 
+@media (max-width: 800px) {
+  #save-page a img {
+    max-width: 600px;
+  }
+}
+
 /* editor stuff */
 
 #output {
