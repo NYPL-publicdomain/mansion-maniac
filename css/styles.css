@@ -281,6 +281,7 @@ div.button span {
   color: #222;
   background-color: rgb(201, 193, 173);
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
   height: 0%;
   top: 100%;
   transition: all 0.5s ease-in-out 0s;
