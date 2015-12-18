@@ -204,7 +204,6 @@ var Mansion;
             pageElement.replaceChild(link, imageElement);
         };
         Mansion.prototype.makePNG = function (link) {
-            console.log("PNG!");
             var bounds = this.roomContainer.getBounds();
             this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
             var url = this.roomContainer.getCacheDataURL();
@@ -270,7 +269,6 @@ var Mansion;
             // NOTE: works only for single-door walls
             if (!collidingDoor || currentRoom.doorsUsed[collidingDoor.position].length !== 0)
                 return;
-            console.log("new room!");
             currentRoom.doorsUsed[collidingDoor.position] = collidingDoor.data;
             var complementRoom = this.findComplementaryRoom(collidingDoor);
             if (!complementRoom)
@@ -582,7 +580,7 @@ var Mansion;
                 doors: event.item.doors
             };
             this.roomItems.push(data);
-            console.log(room);
+            // console.log(room);
         };
         Mansion.prototype.handleLoadComplete = function (event) {
             var _this = this;

@@ -214,7 +214,6 @@ module Mansion {
     }
 
     makePNG(link) {
-      console.log("PNG!");
       var bounds = this.roomContainer.getBounds();
       this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
       var url = this.roomContainer.getCacheDataURL();
@@ -287,8 +286,6 @@ module Mansion {
       var collidingDoor = this.findCollidingDoor(tiles, currentRoom.roomData);
       // NOTE: works only for single-door walls
       if (!collidingDoor || currentRoom.doorsUsed[collidingDoor.position].length !== 0) return;
-
-      console.log("new room!");
 
       currentRoom.doorsUsed[collidingDoor.position] = collidingDoor.data;
       var complementRoom = this.findComplementaryRoom(collidingDoor);
@@ -629,7 +626,7 @@ module Mansion {
         doors: event.item.doors
       };
       this.roomItems.push(data);
-      console.log(room);
+      // console.log(room);
     }
 
     handleLoadComplete(event) {
