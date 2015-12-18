@@ -199,7 +199,7 @@ var Mansion;
             var link = document.createElement('a');
             link.setAttribute('href', url);
             link.setAttribute('id', 'mansion-image');
-            link.setAttribute('title', 'click to save image');
+            link.setAttribute('title', 'click to download image');
             link.setAttribute('download', 'mansion.png');
             var image = new Image();
             image.src = url;
