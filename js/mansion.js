@@ -186,33 +186,31 @@ var Mansion;
             var bounds = this.roomContainer.getBounds();
             if (!bounds)
                 return;
-            // var shadow = new createjs.Shadow("#000000", -2, 2, 2);
-            // var watermark = new createjs.Text("My Mansion", "24px 'Forum-Regular', 'Times New Roman', Times, serif", "#ffffff");
-            // this.roomContainer.addChild(watermark);
-            // var waterBounds = watermark.getBounds();
-            // watermark.x = bounds.x + (-waterBounds.width * .5) + bounds.width * .5;
-            // watermark.y = bounds.y + (-waterBounds.height * .5) + bounds.height * .5;
-            // watermark.shadow = shadow;
-            // var footer = new createjs.Text("Rooms from the “Apartment Houses of the Metropolis” collection\nin the New York Public Library (1908-1913)", "14px 'Forum-Regular', 'Times New Roman', Times, serif", "#ffffff");
-            // footer.textAlign = "center";
-            // this.roomContainer.addChild(footer);
-            // var footerBounds = footer.getBounds();
-            // footer.x = bounds.x + (-footerBounds.width * .5) + bounds.width * .5;
-            // footer.y = bounds.y -footerBounds.height + bounds.height;
-            // footer.shadow = shadow;
             this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
             var url = this.roomContainer.getCacheDataURL();
-            // prompt browser download
-            var element = document.createElement('a');
-            element.setAttribute('href', url);
-            element.setAttribute('download', 'mansion.png');
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
+            // show mansion image page
+            var score = this.getScore();
+            var str = 'You created a mansion with ' + this.mazeRooms.length + ' room' + (this.mazeRooms.length > 1 ? 's' : '') + ' and ' + score;
+            var scoreElement = document.getElementById("save-score");
+            scoreElement.innerHTML = str;
+            var pageElement = document.getElementById("save-page");
+            pageElement.style.display = 'block';
+            var imageElement = document.getElementById("mansion-image");
+            var link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('id', 'mansion-image');
+            link.setAttribute('title', 'click to save image');
+            link.setAttribute('download', 'mansion.png');
+            var image = new Image();
+            image.src = url;
+            link.appendChild(image);
+            pageElement.replaceChild(link, imageElement);
             // refresh room container
-            // this.roomContainer.removeChild(watermark);
-            // this.roomContainer.removeChild(footer);
             this.roomContainer.uncache();
+        };
+        Mansion.prototype.closeSave = function () {
+            var pageElement = document.getElementById("save-page");
+            pageElement.style.display = 'none';
         };
         Mansion.prototype.startMaze = function () {
             this.addBaseRoom();
@@ -521,6 +519,10 @@ var Mansion;
         };
         Mansion.prototype.updateScore = function () {
             var score = document.getElementById("score");
+            var str = this.getScore();
+            score.innerHTML = str;
+        };
+        Mansion.prototype.getScore = function () {
             var sqft = 0;
             for (var room in this.mazeRooms) {
                 var tiles = this.mazeRooms[room].roomData.tiles;
@@ -529,7 +531,7 @@ var Mansion;
             }
             var sqm = Math.round(sqft * 0.09);
             var str = '~' + sqm + ' m<sup>2</sup> (~' + sqft + ' ft<sup>2</sup>)';
-            score.innerHTML = str;
+            return str;
         };
         Mansion.prototype.loadCat = function () {
             var data = {

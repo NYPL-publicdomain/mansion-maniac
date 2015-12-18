@@ -7,7 +7,7 @@
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <title>Mansion Maniacs</title>
+  <title>Mansion Maniac</title>
   <script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
   <script src="https://code.createjs.com/preloadjs-0.6.1.min.js"></script>
   <style>
@@ -48,7 +48,7 @@
       <div class="mansion">
         <h1>MANSION MANIAC</h1>
         <div class="description">
-          <p>Built from digitized assets of the New York Public Library's collection of <a href="http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about">Apartment Houses of the Metropolis</a>, this game/toy lets you explore mansion floor plans from the early 20th century in New York city.</p>
+          <p>Built from digitized assets of the New York Public Library's collection of <a target="_blank" href="http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about">Apartment Houses of the Metropolis</a>, this game/toy lets you explore mansion floor plans from the early 20th century in New York city.</p>
           <p>Move around and zoom using the provided buttons:<br />←, ↑, ↓, →, +, -</p>
           <div class="total"><span id="progress"></span></div>
           <div class="button" id="start-button">Loading...</div>
@@ -56,12 +56,12 @@
       </div>
     </div>
   </div>
-  <!-- <div id="save-page">
+  <div id="save-page">
     <h1>YOUR MANSION</h1>
-    <p>You created a mansion with X rooms and Y ft<sup>2</sup> (Z m<sup>2</sup>).</p>
-    <p><a href="http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about">View the original images used</a></p>
-    <img id="mansion" width="800" />
-  </div> -->
+    <p id="save-score">You created a mansion with X rooms and Y ft<sup>2</sup> (Z m<sup>2</sup>).</p>
+    <p><a target="_blank" href="http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about">View the original assets used in your floorplan</a>. <a onclick="_maniac.closeSave()">Return to Mansion Maniac</a>.</p>
+    <a id="mansion-image"><img width="800" /></a>
+  </div>
   <script src="js/lib/underscore-min.js"></script>
   <script src="js/mansion.js"></script>
   <script type="text/javascript">

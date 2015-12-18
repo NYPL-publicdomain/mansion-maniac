@@ -282,6 +282,19 @@ div.button span {
   background-color: rgb(201, 193, 173);
   padding: 40px;
   overflow: scroll;
+  display: none;
+}
+
+#save-page p {
+  margin-bottom: 1em;
+}
+
+#save-page a {
+  cursor: pointer;
+}
+
+#save-page a img {
+  max-width: 800px;
 }
 
 /* editor stuff */
