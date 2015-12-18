@@ -138,7 +138,11 @@ module Mansion {
     }
 
     reset() {
-        if (this.loading || createjs.Ticker.getTime() - this.lastReset < 500) return;
+      if (this.loading || createjs.Ticker.getTime() - this.lastReset < 500) return;
+      var x = Math.floor(this.canvas.width * .5);
+      var y = Math.floor(this.canvas.height * .5);
+      this.stage.x = x;
+      this.stage.y = y;
       this.lastReset = createjs.Ticker.getTime();
       this.roomContainer.removeAllChildren();
       this.tileShape.graphics.clear();
