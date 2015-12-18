@@ -193,29 +193,36 @@ module Mansion {
       var bounds = this.roomContainer.getBounds();
       if (!bounds) return;
 
-      this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
-      var url = this.roomContainer.getCacheDataURL();
       // show mansion image page
       var score = this.getScore();
       var str = 'You created a mansion with ' + this.mazeRooms.length + ' room' + (this.mazeRooms.length>1?'s':'') + ' and ' + score;
       var scoreElement = <HTMLDivElement>document.getElementById("save-score");
       scoreElement.innerHTML = str;
 
-      var pageElement = <HTMLDivElement>document.getElementById("save-page");
-      pageElement.style.display = 'block';
-
-      var imageElement = <HTMLDivElement>document.getElementById("mansion-image");
-
       var link = document.createElement('a');
-      link.setAttribute('href', url);
       link.setAttribute('id', 'mansion-image');
       link.setAttribute('title', 'click to download image');
       link.setAttribute('download', 'mansion.png');
 
+      var pageElement = <HTMLDivElement>document.getElementById("save-page");
+      pageElement.addEventListener('transitionend', () => { this.makePNG(link) });
+      pageElement.addEventListener('webkitTransitionEnd', () => { this.makePNG(link) });
+      pageElement.className = 'visible';
+
+      var imageElement = <HTMLDivElement>document.getElementById("mansion-image");
+      pageElement.replaceChild(link, imageElement);
+    }
+
+    makePNG(link) {
+      console.log("PNG!");
+      var bounds = this.roomContainer.getBounds();
+      this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
+      var url = this.roomContainer.getCacheDataURL();
+      link.setAttribute('href', url);
+
       var image = new Image();
       image.src = url;
       link.appendChild(image);
-      pageElement.replaceChild(link, imageElement);
 
       // refresh room container
       this.roomContainer.uncache();
@@ -223,7 +230,7 @@ module Mansion {
 
     closeSave() {
       var pageElement = <HTMLDivElement>document.getElementById("save-page");
-      pageElement.style.display = 'none';
+      pageElement.className = '';
     }
 
     startMaze() {

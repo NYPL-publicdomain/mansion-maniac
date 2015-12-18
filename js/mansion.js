@@ -179,6 +179,7 @@ var Mansion;
             this.avatar.visible = false;
         };
         Mansion.prototype.saveMansion = function () {
+            var _this = this;
             if (this.loading || createjs.Ticker.getTime() - this.lastSave < 500)
                 return;
             this.lastSave = createjs.Ticker.getTime();
@@ -186,31 +187,37 @@ var Mansion;
             var bounds = this.roomContainer.getBounds();
             if (!bounds)
                 return;
-            this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
-            var url = this.roomContainer.getCacheDataURL();
             // show mansion image page
             var score = this.getScore();
             var str = 'You created a mansion with ' + this.mazeRooms.length + ' room' + (this.mazeRooms.length > 1 ? 's' : '') + ' and ' + score;
             var scoreElement = document.getElementById("save-score");
             scoreElement.innerHTML = str;
-            var pageElement = document.getElementById("save-page");
-            pageElement.style.display = 'block';
-            var imageElement = document.getElementById("mansion-image");
             var link = document.createElement('a');
-            link.setAttribute('href', url);
             link.setAttribute('id', 'mansion-image');
             link.setAttribute('title', 'click to download image');
             link.setAttribute('download', 'mansion.png');
+            var pageElement = document.getElementById("save-page");
+            pageElement.addEventListener('transitionend', function () { _this.makePNG(link); });
+            pageElement.addEventListener('webkitTransitionEnd', function () { _this.makePNG(link); });
+            pageElement.className = 'visible';
+            var imageElement = document.getElementById("mansion-image");
+            pageElement.replaceChild(link, imageElement);
+        };
+        Mansion.prototype.makePNG = function (link) {
+            console.log("PNG!");
+            var bounds = this.roomContainer.getBounds();
+            this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
+            var url = this.roomContainer.getCacheDataURL();
+            link.setAttribute('href', url);
             var image = new Image();
             image.src = url;
             link.appendChild(image);
-            pageElement.replaceChild(link, imageElement);
             // refresh room container
             this.roomContainer.uncache();
         };
         Mansion.prototype.closeSave = function () {
             var pageElement = document.getElementById("save-page");
-            pageElement.style.display = 'none';
+            pageElement.className = '';
         };
         Mansion.prototype.startMaze = function () {
             this.addBaseRoom();

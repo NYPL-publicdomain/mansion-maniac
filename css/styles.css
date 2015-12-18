@@ -5,6 +5,7 @@
 
 body {
   background-color: black;
+  overflow: hidden;
 }
 
 a {
@@ -275,14 +276,20 @@ div.button span {
   right: 0;
   bottom: 0;
   text-align: center;
-  z-index: 11;
+  z-index: 111;
   font-family: 'Forum-Regular', 'Times New Roman', Times, serif;
   font-size: 18px;
   color: #222;
   background-color: rgb(201, 193, 173);
   padding: 40px;
   overflow: scroll;
-  display: none;
+  top: 100%;
+  border: 1px solid #333;
+  transition: top 0.5s ease-in-out 0s;
+}
+
+#save-page.visible {
+  top: 0%;
 }
 
 #save-page p {
