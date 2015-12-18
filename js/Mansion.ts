@@ -143,6 +143,7 @@ module Mansion {
       var y = Math.floor(this.canvas.height * .5);
       this.stage.x = x;
       this.stage.y = y;
+      this.stage.scaleX = this.stage.scaleY = 1;
       this.lastReset = createjs.Ticker.getTime();
       this.roomContainer.removeAllChildren();
       this.tileShape.graphics.clear();
