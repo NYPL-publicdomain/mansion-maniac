@@ -213,7 +213,8 @@ module Mansion {
       pageElement.replaceChild(link, imageElement);
     }
 
-    makePNG(link) {
+    makePNG(link: HTMLElement) {
+      if (link.childNodes.length > 0) return;
       var bounds = this.roomContainer.getBounds();
       this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
       var url = this.roomContainer.getCacheDataURL();

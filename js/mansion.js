@@ -204,6 +204,8 @@ var Mansion;
             pageElement.replaceChild(link, imageElement);
         };
         Mansion.prototype.makePNG = function (link) {
+            if (link.childNodes.length > 0)
+                return;
             var bounds = this.roomContainer.getBounds();
             this.roomContainer.cache(bounds.x, bounds.y, bounds.width, bounds.height);
             var url = this.roomContainer.getCacheDataURL();

@@ -272,7 +272,6 @@ div.button span {
 #save-page {
   position: absolute;
   left: 0;
-  top: 0;
   right: 0;
   bottom: 0;
   text-align: center;
@@ -283,13 +282,15 @@ div.button span {
   background-color: rgb(201, 193, 173);
   padding: 40px;
   overflow: scroll;
+  height: 0%;
   top: 100%;
   border: 1px solid #333;
-  transition: top 0.5s ease-in-out 0s;
+  transition: all 0.5s ease-in-out 0s;
 }
 
 #save-page.visible {
   top: 0%;
+  height: 100%;
 }
 
 #save-page p {
