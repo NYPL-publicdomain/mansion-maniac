@@ -25,6 +25,17 @@ small, sub, sup { font-size: .8em }
 sub             { vertical-align: sub }
 sup             { vertical-align: super }
 
+.lion {
+  display: inline-block;
+  background: transparent url(../images/lion-rev.png) no-repeat;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  font-size: 1px;
+  color: #C0BCB2;
+  vertical-align: middle;
+}
+
 .editor {
   /*position: absolute;*/
   background-color: #666;
