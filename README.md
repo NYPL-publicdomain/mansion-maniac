@@ -10,6 +10,6 @@ There's a very basic [room editor](http://publicdomain.nypl.org/mansion-maniac/e
 
 ### Credits
 
-Made with [CreateJS](http://createjs.com/) and [TypeScript](http://typescriptlang.org/)
+Made with [CreateJS](http://createjs.com/) and [TypeScript](http://typescriptlang.org/).
 
 The name of this project is inspired by the amazing [Maniac Mansion](https://en.wikipedia.org/wiki/Maniac_Mansion) videogame by Ron Gilbert and Gary Winnick.
