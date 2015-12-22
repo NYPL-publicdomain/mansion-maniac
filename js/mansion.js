@@ -603,6 +603,7 @@ var Mansion;
             };
         };
         Mansion.prototype.handleResize = function () {
+            document.body.scrollTop = 0;
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
         };
