@@ -28,6 +28,7 @@ sup             { vertical-align: super }
 .lion {
   display: inline-block;
   background: transparent url(../images/lion-rev.png) no-repeat;
+  background-size: cover;
   width: 30px;
   height: 30px;
   margin-right: 10px;
@@ -56,6 +57,17 @@ sup             { vertical-align: super }
   padding: 5px;
   font-family: 'Forum-Regular', 'Times New Roman', Times, serif;
   text-align: center;
+}
+
+@media (max-width: 800px) {
+  .lion {
+    width: 15px;
+    height: 15px;
+  }
+
+  #credits {
+    font-size: 12px;
+  }
 }
 
 #credits a:hover {
@@ -269,7 +281,7 @@ div.button span {
 
 #score {
   position: absolute;
-  top: 30px;
+  top: 60px;
   left: 0;
   right: 0;
   text-align: center;
