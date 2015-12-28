@@ -8,6 +8,18 @@ Uses images from the [Apartment Houses of the Metropolis](http://digitalcollecti
 
 There's a very basic [room editor](http://publicdomain.nypl.org/mansion-maniac/editor.html) that let's you see how each room is built (use the left/right arrows to change room).
 
+### About the NYPL Public Domain Release
+
+On January 6, 2016, The New York Public Library enhanced access to public domain items in Digital Collections so that everyone has the freedom to enjoy and reuse these materials in almost limitless ways. For all such items the Library now makes it possible to download the highest resolution images available directly from the Digital Collections website. 
+
+That means more than 187,000 items free to use without restriction! But we know that 180K of anything is a lot to get your head around — so as a way to introduce you to these collections and inspire new works, NYPL Labs developed a suite of projects and tools to help you explore the vast collections and dive deep into specific ones. 
+
+Go forth & re-use; apply for our Remix Residency; and let us know what you made with the #nyplpd hashtag. For more info, links to our projects and more, visit:
+
+- [More about our public domain release](http://publicdomain.nypl.org)
+- [Remix Residency](http://publicdomain.nypl.org)
+- [Data & Tools](https://github.com/NYPL-publicdomain/data-and-utilities)
+
 ### Credits
 
 Made with [CreateJS](http://createjs.com/) and [TypeScript](http://typescriptlang.org/).
