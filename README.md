@@ -8,6 +8,12 @@ Uses images from the [Apartment Houses of the Metropolis](http://digitalcollecti
 
 There's a very basic [room editor](http://publicdomain.nypl.org/mansion-maniac/editor.html) that let's you see how each room is built (use the left/right arrows to change room).
 
+### Credits
+
+Made with [CreateJS](http://createjs.com/) and [TypeScript](http://typescriptlang.org/).
+
+The name of this project is inspired by the amazing [Maniac Mansion](https://en.wikipedia.org/wiki/Maniac_Mansion) videogame by Ron Gilbert and Gary Winnick.
+
 ### About the NYPL Public Domain Release
 
 On January 6, 2016, The New York Public Library enhanced access to public domain items in Digital Collections so that everyone has the freedom to enjoy and reuse these materials in almost limitless ways. For all such items the Library now makes it possible to download the highest resolution images available directly from the Digital Collections website. 
@@ -19,9 +25,3 @@ Go forth & re-use; apply for our Remix Residency; and let us know what you made 
 - [More about our public domain release](http://publicdomain.nypl.org)
 - [Remix Residency](http://publicdomain.nypl.org)
 - [Data & Tools](https://github.com/NYPL-publicdomain/data-and-utilities)
-
-### Credits
-
-Made with [CreateJS](http://createjs.com/) and [TypeScript](http://typescriptlang.org/).
-
-The name of this project is inspired by the amazing [Maniac Mansion](https://en.wikipedia.org/wiki/Maniac_Mansion) videogame by Ron Gilbert and Gary Winnick.
