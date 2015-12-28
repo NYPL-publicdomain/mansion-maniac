@@ -23,5 +23,5 @@ That means more than 187,000 items free to use without restriction! But we know 
 Go forth & re-use; apply for our Remix Residency; and let us know what you made with the #nyplpd hashtag. For more info, links to our projects and more, visit:
 
 - [More about our public domain release](http://publicdomain.nypl.org)
-- [Remix Residency](http://publicdomain.nypl.org)
+- Remix Residency
 - [Data & Tools](https://github.com/NYPL-publicdomain/data-and-utilities)
