@@ -2,7 +2,7 @@
 
 ## Build your own Manhattan Mansion!
 
-This is a procedural maze/dungeon builder that uses blueprints from NYPL's [Apartment Houses of the Metropolis](http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about) collection. Individual rooms were cut out from the images in the collection and manually annotated with the [room editor](#Room editor). This places every room in a square grid that then allows for the player's avatar to explore.
+This is a procedural maze/dungeon builder that uses blueprints from NYPL's [Apartment Houses of the Metropolis](http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about) collection. Individual rooms were cut out from the images in the collection and manually annotated with the [room editor](#Room-editor). This places every room in a square grid that then allows for the player's avatar to explore.
 
 ### [Play now!](http://publicdomain.nypl.org/mansion-maniac/)
 
