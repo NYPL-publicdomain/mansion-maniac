@@ -44,7 +44,8 @@ var Mansion;
                 68: function () { _this.toggleDebug(); },
                 32: function () { _this.reset(); },
                 // 82: () => {  }, // R
-                87: function () { _this.saveMansion(); },
+                // 87: () => { this.saveMansion() }, // W
+                71: function () { _this.saveMansion(); },
                 61: function () { _this.zoomIn(); },
                 107: function () { _this.zoomIn(); },
                 109: function () { _this.zoomOut(); },

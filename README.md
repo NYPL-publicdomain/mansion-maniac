@@ -24,6 +24,8 @@ Rooms are of two types: starting/root rooms (the first room displayed) and regul
 
 There's a very basic [room editor](http://publicdomain.nypl.org/mansion-maniac/editor.html) that lets you see how each room is built (use the left/right arrows to change room). The editor does a simple check to verify that all doors have at least one complementary door (e.g.: if there is a 3-square door on the right there needs to be at least one 3-square door on the left).
 
+_Easter egg_: there is a “debug mode” in the game that shows the different tiles for the rooms and is accessible by tapping the `D` key.
+
 If you're interested in procedural dungeons similar to this one or those used in videogames, here's [a nice write up on dungeon algorithms](http://www.futuredatalab.com/proceduraldungeon/).
 
 ### End game and saving

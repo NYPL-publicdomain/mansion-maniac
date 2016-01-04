@@ -38,7 +38,8 @@ module Mansion {
         68: () => { this.toggleDebug(); },
         32: () => { this.reset(); }, // space
         // 82: () => {  }, // R
-        87: () => { this.saveMansion() }, // W
+        // 87: () => { this.saveMansion() }, // W
+        71: () => { this.saveMansion() }, // G
         61: () => { this.zoomIn() },
         107: () => { this.zoomIn() },
         109: () => { this.zoomOut() },
