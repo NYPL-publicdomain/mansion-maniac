@@ -6,6 +6,8 @@ Build your own Manhattan Mansion!
 
 Uses images from the [Apartment Houses of the Metropolis](http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about) collection and [its supplement](http://digitalcollections.nypl.org/collections/supplement-to-apartment-houses-of-the-metropolis#/?tab=about), [made available by the New York Public Library](http://publicdomain.nypl.org) as [public domain material](https://en.wikipedia.org/wiki/Public_domain).
 
+### Room editor
+
 There's a very basic [room editor](http://publicdomain.nypl.org/mansion-maniac/editor.html) that lets you see how each room is built (use the left/right arrows to change room).
 
 ### Credits
