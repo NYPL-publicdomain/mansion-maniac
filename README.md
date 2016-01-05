@@ -10,7 +10,7 @@ This is a procedural maze/dungeon builder that uses blueprints from NYPL's [Apar
 
 Uses images from the [Apartment Houses of the Metropolis](http://digitalcollections.nypl.org/collections/apartment-houses-of-the-metropolis#/?tab=about) collection and [its supplement](http://digitalcollections.nypl.org/collections/supplement-to-apartment-houses-of-the-metropolis#/?tab=about), [made available by the New York Public Library](http://publicdomain.nypl.org) as [public domain material](https://en.wikipedia.org/wiki/Public_domain).
 
-[![The Fiora-Ville and Paterno, 616 and 620 West 116th Street, near Riverside Drive ; Plan of first floor ; Plan of upper floors.](/images/readme-page-1.jpg?raw=true)](http://digitalcollections.nypl.org/items/510d47db-9ec9-a3d9-e040-e00a18064a99) [![The Euafaula, northeast corner Hamilton Place and 139th Street; Plan of first floor; Plan of upper floors.](/images/readme-page-1.jpg?raw=true)](http://digitalcollections.nypl.org/items/510d47db-9ef3-a3d9-e040-e00a18064a99)
+[![The Fiora-Ville and Paterno, 616 and 620 West 116th Street, near Riverside Drive ; Plan of first floor ; Plan of upper floors.](/images/readme-page-1.jpg?raw=true)](http://digitalcollections.nypl.org/items/510d47db-9ec9-a3d9-e040-e00a18064a99) [![The Euafaula, northeast corner Hamilton Place and 139th Street; Plan of first floor; Plan of upper floors.](/images/readme-page-2.jpg?raw=true)](http://digitalcollections.nypl.org/items/510d47db-9ef3-a3d9-e040-e00a18064a99)
 
 ### Room editor
 
