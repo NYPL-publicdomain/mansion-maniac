@@ -41,6 +41,11 @@ Made with [CreateJS](http://createjs.com/) and [TypeScript](http://typescriptlan
 The name of this project is inspired by the amazing [Maniac Mansion](https://en.wikipedia.org/wiki/Maniac_Mansion) videogame by Ron Gilbert and Gary Winnick.
 
 ---
+
+### License
+
+See [license](/LICENSE).
+
 ### About the NYPL Public Domain Release
 
 On January 6, 2016, The New York Public Library enhanced access to public domain items in Digital Collections so that everyone has the freedom to enjoy and reuse these materials in almost limitless ways. For all such items the Library now makes it possible to download the highest resolution images available directly from the [Digital Collections](http://digitalcollections.nypl.org) website. 
